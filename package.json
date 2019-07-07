@@ -4,16 +4,21 @@
   "main": "src/main.ts",
   "license": "MIT",
   "scripts": {
-    "dev": "yarn watch \"yarn lint\" ./src & webpack --watch --mode development & webpack-dev-server --mode development",
+    "dev": "concurrently \"yarn:dev:*\"",
+    "dev:lint": "yarn watch \"yarn lint\" ./src",
+    "dev:wp": "webpack --watch --mode development",
+    "dev:wpds": "webpack-dev-server --mode development",
     "lint": "tslint -p \".\" -t stylish",
-    "get-typedef": "mkdir types && mkdir types/phaser && curl -o types/phaser/index.d.ts https://raw.githubusercontent.com/photonstorm/phaser/master/types/phaser.d.ts"
+    "get-typedef": "mkdirp types/phaser && curl -o types/phaser/index.d.ts https://raw.githubusercontent.com/photonstorm/phaser/master/types/phaser.d.ts"
   },
   "dependencies": {
     "easystarjs": "^0.4.3",
     "phaser": "3.18.1"
   },
   "devDependencies": {
+    "concurrently": "^4.1.1",
     "expose-loader": "^0.7.5",
+    "mkdirp": "^0.5.1",
     "raw-loader": "^3.0.0",
     "ts-loader": "^6.0.4",
     "tslint": "^5.11.0",
