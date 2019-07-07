@@ -1,0 +1,27 @@
+{
+  "name": "here-be-dragons",
+  "version": "0.0.1",
+  "main": "src/main.ts",
+  "license": "MIT",
+  "scripts": {
+    "dev": "yarn watch \"yarn lint\" ./src & webpack --watch --mode development & webpack-dev-server --mode development",
+    "lint": "tslint -p \".\" -t stylish",
+    "get-typedef": "mkdir types && mkdir types/phaser && curl -o types/phaser/index.d.ts https://raw.githubusercontent.com/photonstorm/phaser/master/types/phaser.d.ts"
+  },
+  "dependencies": {
+    "easystarjs": "^0.4.3",
+    "phaser": "3.18.1"
+  },
+  "devDependencies": {
+    "expose-loader": "^0.7.5",
+    "raw-loader": "^3.0.0",
+    "ts-loader": "^6.0.4",
+    "tslint": "^5.11.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.1.6",
+    "watch": "^1.0.2",
+    "webpack": "^4.24.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
+  }
+}

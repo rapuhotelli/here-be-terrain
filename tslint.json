@@ -1,0 +1,52 @@
+{
+  "extends": [
+    "tslint-eslint-rules"
+  ],
+  "rules": {
+    "whitespace": [true, "check-module"],
+    "ordered-imports": [
+      true
+    ],
+    "quotemark": [
+      true,
+      "single",
+      "avoid-escape"
+    ],
+    "semicolon": [
+      true
+
+    ],
+    "member-access": [
+      false
+    ],
+    "member-ordering": [
+      false
+    ],
+    "trailing-comma": [
+      true,
+      {
+        "singleline": "never",
+        "multiline": "always"
+      }
+    ],
+    "no-empty": false,
+    "no-submodule-imports": false,
+    "no-implicit-dependencies": false,
+    "no-constant-condition": false,
+    "triple-equals": [
+      true,
+      "allow-undefined-check"
+    ],
+    "ter-indent": [
+      true,
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "no-duplicate-imports": false,
+    "max-classes-per-file": [
+      false
+    ]
+  }
+}
