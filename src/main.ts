@@ -1,6 +1,8 @@
 import 'phaser';
 import GameConfig = Phaser.Types.Core.GameConfig;
 
+import MapScene from './map.scene';
+
 console.log('I run');
 
 export class Game extends Phaser.Game {
@@ -13,5 +15,7 @@ export class Game extends Phaser.Game {
 
 
 window.onload = () => {
-  const game = new Game({});
+  const game = new Game({
+    scene: MapScene,
+  });
 };

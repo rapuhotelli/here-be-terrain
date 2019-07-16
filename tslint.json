@@ -45,8 +45,6 @@
       }
     ],
     "no-duplicate-imports": false,
-    "max-classes-per-file": [
-      false
-    ]
+    "max-classes-per-file": false
   }
 }
