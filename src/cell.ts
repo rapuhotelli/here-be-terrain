@@ -9,10 +9,8 @@ export class Cell implements GameObject {
     this.column = column;
   }
 
-  asGameObject(scene: Phaser.Scene, x: number, y: number, size: number) : Phaser.GameObjects.Rectangle {
-    const cell = new Phaser.GameObjects.Rectangle(scene, x, y, size, size);
-    cell.setFillStyle(0x0, 0);
-    cell.setStrokeStyle(1, 0xFFFFFF, 0.5);
-    return cell;
+  addToScene(scene: Phaser.Scene, x: number, y: number, size: number) : void {
+    const fillAlpha = (this.row + this.column) % 2 ? 0.2 : 0;
+    scene.add.rectangle(x, y, size, size, 0xFFFFFF, fillAlpha);
   }
 }

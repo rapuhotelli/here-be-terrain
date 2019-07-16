@@ -1,3 +1,3 @@
 export interface GameObject {
-  asGameObject: (scene: Phaser.Scene, ...otherArgs: any[]) => Phaser.GameObjects.GameObject; 
+  addToScene: (scene: Phaser.Scene, ...otherArgs: any[]) => void; 
 }

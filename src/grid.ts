@@ -11,25 +11,22 @@ export class Grid implements GameObject {
     this.columns = columns;
     this.cells = [];
 
-    for (let r = 0; r < rows; ++r) {
+    for (let row = 0; row < rows; ++row) {
       this.cells.push([]);
-      for (let c = 0; c < columns; ++c) {
-        this.cells[r].push(new Cell(r, c));
+      for (let col = 0; col < columns; ++col) {
+        this.cells[row].push(new Cell(row, col));
       }
     }
   }
 
-  asGameObject(scene: Phaser.Scene, x: number, y: number, cellSize: number): Phaser.GameObjects.Container {
-    let cells = [];
-    for (let c = 0; c < this.columns; ++c) {
-      const cellX = (c - (this.columns / 2)) * cellSize;
-      for (let r = 0; r < this.rows; ++r) {
-        const cellY = (r - (this.rows / 2)) * cellSize;
-        cells.push(this.cells[r][c].asGameObject(scene, cellX, cellY, cellSize));
+  addToScene(scene: Phaser.Scene, gridX: number, gridY: number, cellSize: number): void {
+    const halfCellSize = cellSize / 2;
+    for (let col = 0; col < this.columns; ++col) {
+      const cellX = (col - (this.columns / 2)) * cellSize + halfCellSize + gridX;
+      for (let row = 0; row < this.rows; ++row) {
+        const cellY = (row - (this.rows / 2)) * cellSize + halfCellSize + gridY;
+        this.cells[row][col].addToScene(scene, cellX, cellY, cellSize);
       }
     }
-  
-    const container = new Phaser.GameObjects.Container(scene, x, y, cells);
-    return container;
   }
 }
