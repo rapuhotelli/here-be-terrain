@@ -4,11 +4,6 @@
   "main": "src/main.ts",
   "license": "MIT",
   "private": true,
-  "workspaces": [
-    "hbt-mainscreen",
-    "hbt-dmscreen",
-    "hbt-server"
-  ],
   "scripts": {
     "dev": "concurrently \"yarn:dev:*\"",
     "dev:lint": "yarn watch \"yarn lint\" ./src",

@@ -2,6 +2,8 @@ node_modules
 .idea
 yarn-error.log
 dist/build.js
+hbt-mainscreen/dist/build.js
+hbt-dmscreen/dist/build.js
 .DS_Store
 types/phaser/index.d.ts
 .vscode/

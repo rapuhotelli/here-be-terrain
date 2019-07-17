@@ -1,0 +1,24 @@
+{
+  "name": "hbt-server",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "concurrently \"yarn:dev:*\"",
+    "dev:lint": "yarn watch \"yarn lint\" ./src",
+    "dev:tsc": "tsc --preserveWatchOutput -w",
+    "dev:nodemon": "nodemon",
+    "lint": "tslint -p \".\" -t stylish"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "concurrently": "^4.1.1",
+    "nodemon": "^1.19.1",
+    "tslint": "^5.18.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.5.3"
+  }
+}
