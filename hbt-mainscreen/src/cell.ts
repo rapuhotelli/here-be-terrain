@@ -1,4 +1,4 @@
-import { GameObject } from '../types/custom';
+import { GameObject } from '../../types/custom';
 
 export class Cell implements GameObject {
   row: number;

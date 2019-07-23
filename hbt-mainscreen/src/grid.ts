@@ -1,4 +1,4 @@
-import { GameObject } from '../types/custom';
+import { GameObject } from '../../types/custom';
 import { Cell } from './cell';
 
 export class Grid implements GameObject {
