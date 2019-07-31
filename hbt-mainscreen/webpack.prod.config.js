@@ -6,7 +6,7 @@ const webpack = require('webpack');
 module.exports = {
   entry: './src/main.ts',
   output: {
-    path: path.resolve(__dirname, '../hbt-server/public'),
+    path: path.resolve(__dirname, '../hbt-server/public/client'),
     filename: 'main.dist.js',
   },
   module: {

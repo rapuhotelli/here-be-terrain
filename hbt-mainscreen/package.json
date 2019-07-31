@@ -9,7 +9,7 @@
     "dev": "concurrently \"yarn:dev:*\"",
     "dev:lint": "yarn watch \"yarn lint\" ./src",
     "dev:wp": "webpack --watch --mode development",
-    "dev:wpds": "webpack-dev-server --mode development",
+    "wpds": "webpack-dev-server --mode development",
     "lint": "tslint -p \".\" -t stylish",
     "get-typedef": "mkdirp types/phaser && curl -o types/phaser/index.d.ts https://raw.githubusercontent.com/photonstorm/phaser/master/types/phaser.d.ts"
   },

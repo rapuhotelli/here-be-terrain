@@ -1,10 +1,35 @@
+import { IEncounter } from './EncounterManager';
 import { Grid } from './grid';
+import { DEFAULT_CELL_SIZE } from './params';
 
-const effectsMap = new Grid(10, 15);
 
 export default class MapScene extends Phaser.Scene {
-  preload() { }
+
+  effectsMap: Grid;
+  encounter: IEncounter;
+
+  constructor(encounter: IEncounter) {
+    super({
+      key: 'MapScene',
+    });
+    this.encounter = encounter;
+  }
+
+  preload() {
+    this.encounter.layers.map((layer, order) => {
+      this.load.image(`layer${order}`, 'encounters/testcampaign/jungle1/jungle1.png');
+    });
+  }
+
   create() {
-    effectsMap.addToScene(this, 1024/2, 768/2, 32);
+    let { width: screenWidth, height: screenHeight } = this.sys.game.canvas;
+
+    const cellSize = DEFAULT_CELL_SIZE;
+
+    const columns = Math.ceil(screenWidth / cellSize);
+    const rows = Math.ceil(screenHeight / cellSize);
+
+    this.effectsMap = new Grid(rows, columns);
+    this.effectsMap.addToScene(this, screenWidth/2, screenHeight/2, cellSize);
   }
 }

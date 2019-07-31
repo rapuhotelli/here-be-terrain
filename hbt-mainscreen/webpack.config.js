@@ -6,8 +6,8 @@ const webpack = require('webpack');
 module.exports = {
   entry: './src/main.ts',
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'devbundle.js',
+    path: path.resolve(__dirname, '../hbt-server/public/client'),
+    filename: 'main.js',
   },
   module: {
     rules: [
