@@ -12,6 +12,6 @@ export class Cell implements GameObject {
 
   addToScene(scene: Phaser.Scene, x: number, y: number, size: number) : void {
     const fillAlpha = (this.row + this.column) % 2 ? 0.2 : 0;
-    this.rect = scene.add.rectangle(x, y, size, size, 0xFFFFFF, fillAlpha);
+    this.rect = scene.add.rectangle(x, y, size, size, 0x000000, fillAlpha);
   }
 }

@@ -2,8 +2,6 @@ import 'phaser';
 import GameConfig = Phaser.Types.Core.GameConfig;
 
 import EncounterManager from './EncounterManager';
-import MapScene from './map.scene';
-import MainGrid from './scenes/MainGrid';
 
 console.log('I run');
 

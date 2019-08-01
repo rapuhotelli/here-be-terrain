@@ -8,7 +8,7 @@ export interface IEncounter {
   layers: IEncounterLayer[];
 }
 
-interface IEncounterLayer {
+export interface IEncounterLayer {
   image: string;
   active: boolean;
 }
