@@ -17,19 +17,13 @@ export default class MapScene extends Phaser.Scene {
   
   
   preload() {
-    this.encounter.layers.map((layer: IEncounterLayer, order) => {
-      if (layer.type === 'image') {
-        this.load.image(layer.key, layer.resource);
-      } else if (layer.type === 'shader') {
-        this.load.glsl(layer.key, layer.resource);
-      }
-    });
+
   }
 
   create() {
     let { width: screenWidth, height: screenHeight } = this.sys.game.canvas;
 
-    const cellSize = DEFAULT_CELL_SIZE;
+    const cellSize = this.encounter.cellSize || DEFAULT_CELL_SIZE;
 
     const columns = Math.ceil(screenWidth / cellSize);
     const rows = Math.ceil(screenHeight / cellSize);

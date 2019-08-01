@@ -9,7 +9,7 @@
       "resource": "shaders/water.frag",
       "active": true,
       "position": {
-        "x": 0,
+        "x": 100,
         "y": 0
       },
       "dimensions":{
