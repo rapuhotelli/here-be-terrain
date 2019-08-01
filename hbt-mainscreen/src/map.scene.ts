@@ -30,7 +30,7 @@ export default class MapScene extends Phaser.Scene {
 
     this.encounter.layers.map((layer, order) => {
       if (layer.type === 'image') {
-        this.add.image(DEFAULT_RESOLUTION_X/2, DEFAULT_RESOLUTION_Y/2, layer.key);
+        this.add.image(screenWidth/2, screenWidth/2, layer.key);
       } else if (layer.type === 'shader') {
         const position = layer.position
           ? {x: screenWidth/2 + layer.position.x, y: screenHeight/2 + layer.position.y}

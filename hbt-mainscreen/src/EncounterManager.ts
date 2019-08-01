@@ -36,9 +36,8 @@ export default class EncounterManager extends Phaser.Scene {
 
   create() {
     let { width: screenWidth, height: screenHeight } = this.sys.game.canvas;
-
-
-
+    
+    // todo can we wait here for socket.io to choose the encounter to load?
 
     this.load.on('progress', (value:any) => {
       console.log(value);
