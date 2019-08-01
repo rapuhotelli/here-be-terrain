@@ -7,7 +7,6 @@ export default class MapScene extends Phaser.Scene {
 
   effectsMap: Grid;
   encounter: IEncounter;
-  
 
   constructor(encounter: IEncounter) {
     super({
@@ -18,12 +17,13 @@ export default class MapScene extends Phaser.Scene {
   
   
   preload() {
-    this.encounter.layers.map((layer, order) => {
-      this.load.image(`layer${order}`, 'encounters/testcampaign/jungle1/jungle1.png');
+    this.encounter.layers.map((layer: IEncounterLayer, order) => {
+      if (layer.type === 'image') {
+        this.load.image(layer.key, layer.resource);
+      } else if (layer.type === 'shader') {
+        this.load.glsl(layer.key, layer.resource);
+      }
     });
-    
-    this.load.glsl('water', 'encounters/testcampaign/shaders/water.frag');
-    this.load.glsl('fire', 'encounters/testcampaign/shaders/fireball.frag');
   }
 
   create() {
@@ -35,13 +35,20 @@ export default class MapScene extends Phaser.Scene {
     const rows = Math.ceil(screenHeight / cellSize);
 
     this.encounter.layers.map((layer, order) => {
-      this.add.image(DEFAULT_RESOLUTION_X/2, DEFAULT_RESOLUTION_Y/2, `layer${order}`);
+      if (layer.type === 'image') {
+        this.add.image(DEFAULT_RESOLUTION_X/2, DEFAULT_RESOLUTION_Y/2, layer.key);
+      } else if (layer.type === 'shader') {
+        const position = layer.position
+          ? {x: screenWidth/2 + layer.position.x, y: screenHeight/2 + layer.position.y}
+          : {x: screenWidth/2, y: screenHeight/2 };
+        
+        const dimensions = layer.dimensions || {width: screenWidth, height: screenHeight};
+        this.add.shader(layer.key, position.x, position.y, dimensions.width, dimensions.height);
+      }
     });
     
     this.effectsMap = new Grid(rows, columns);
     this.effectsMap.addToScene(this, screenWidth/2, screenHeight/2, cellSize);
-
-    this.add.shader('fire', 0, 0, 800, 800);
-    this.add.shader('water', 400, 300, 800, 800);
   }
+  
 }

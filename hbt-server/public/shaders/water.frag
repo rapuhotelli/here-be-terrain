@@ -14,10 +14,9 @@ precision mediump float;
 
 #define TAU 6.28318530718
 #define MAX_ITER 5
+#define SHOW_TILING 1
 
-uniform vec3      iResolution;           // viewport resolution (in pixels)
 uniform vec2      resolution;
-uniform float     iTime;                 // shader playback time (in seconds)
 uniform float     time;
 
 void main(void) 
@@ -49,6 +48,7 @@ void main(void)
 
 	#ifdef SHOW_TILING
 	// Flash tile borders...
+    /*
 	vec2 pixel = 2.0 / resolution;
 	uv *= 2.0;
 
@@ -56,7 +56,7 @@ void main(void)
 	vec2 first = step(pixel, uv) * f;		   	// Rule out first screen pixels and flash.
 	uv  = step(fract(uv), pixel);				// Add one line of pixels per tile.
 	colour = mix(colour, vec3(1.0, 1.0, 0.0), (uv.x + uv.y) * first.x * first.y); // Yellow line
-	
+	*/
 	#endif
 	gl_FragColor = vec4(colour, 1.0);
 }

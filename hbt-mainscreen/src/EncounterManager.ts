@@ -9,20 +9,13 @@ export interface IEncounter {
 }
 
 export interface IEncounterLayer {
-  image: string;
+  key: string;
+  type: 'image' | 'shader';
+  resource: string;
   active: boolean;
+  position?: {x: number, y: number};
+  dimensions?: {width: number, height: number};
 }
-
-const testEncounter: IEncounter = {
-  key: 'jungle1',
-  name: 'Jungle Test Map',
-  layers: [
-    {
-      image: 'jungle1.png',
-      active: true,
-    },
-  ],
-};
 
 export default class EncounterManager extends Phaser.Scene {
 
@@ -34,12 +27,14 @@ export default class EncounterManager extends Phaser.Scene {
   }
 
   preload() {
-
+    // todo: somehow inject the encounter-to-load here
+    this.load.json('jungle1', 'encounters/testcampaign/jungle1.json');
   }
 
   create() {
     console.log('creating encounterManager');
-    const map = new MapScene(testEncounter);
+    const encounterData = this.cache.json.get('jungle1');
+    const map = new MapScene(encounterData);
     this.scene.add('MapScene', map, true);
     // MapScene.scene.moveBelow('UI', 'MapScene')
   }

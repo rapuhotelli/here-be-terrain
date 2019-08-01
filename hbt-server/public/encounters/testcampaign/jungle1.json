@@ -1,0 +1,27 @@
+{
+  "key": "jungle1",
+  "name": "Jungle Test Map",
+  "cellSize": 64,
+  "layers": [
+    {
+      "key": "water",
+      "type": "shader",
+      "resource": "shaders/water.frag",
+      "active": true,
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "dimensions":{
+        "width": 800,
+        "height": 720
+      }
+    },
+    {
+      "key": "ground",
+      "type": "image",
+      "resource": "encounters/testcampaign/jungle2.png",
+      "active": true
+    }
+  ]
+}
