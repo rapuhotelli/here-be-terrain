@@ -5,8 +5,6 @@ import EncounterManager from './EncounterManager';
 
 console.log('I run');
 
-
-
 export class Game extends Phaser.Game {
   constructor(config: GameConfig) {
     super(config);
