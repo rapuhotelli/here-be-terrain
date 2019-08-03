@@ -5,3 +5,13 @@ dist/build.js
 .DS_Store
 types/phaser/index.d.ts
 .vscode/
+
+hbt-server/public/client/main.js
+hbt-server/public/client/dm.js
+
+# Don't commit ts-to-js files, they should be built when the server is launched
+hbt-server/build/
+
+# Don't commit dev builds
+hbt-mainscreen/dist/devbundle.js
+hbt-dmscreen/dist/devbundle.js
