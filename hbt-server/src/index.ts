@@ -14,5 +14,5 @@ app.get( '/', ( req: Express.Request, res ) => {
 app.use(express.static('public'));
 
 app.listen( port, () => {
-  console.log( `server started at http://localhost :${ port }` );
+  console.log( `server started at http://localhost:${ port }` );
 });

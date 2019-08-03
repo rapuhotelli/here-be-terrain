@@ -3,7 +3,23 @@ import GameConfig = Phaser.Types.Core.GameConfig;
 
 import EncounterManager from './EncounterManager';
 
-console.log('I run');
+var webgl2Canvas = document.createElement('canvas');
+webgl2Canvas.id = 'webgl2Canvas';
+document.body.appendChild(webgl2Canvas);
+
+var contextCreationConfig = {
+  alpha: false,
+  depth: false,
+  antialias: true,
+  premultipliedAlpha: true,
+  stencil: true,
+  preserveDrawingBuffer: false,
+  failIfMajorPerformanceCaveat: false,
+  powerPreference: 'default',
+};
+
+var webgl2Context = webgl2Canvas.getContext('webgl2', contextCreationConfig);
+
 
 export class Game extends Phaser.Game {
   constructor(config: GameConfig) {
@@ -15,6 +31,10 @@ export class Game extends Phaser.Game {
 //window.onload = () => {
   
 const game = new Game({
+  type: Phaser.WEBGL,
+  canvas: webgl2Canvas,
+  // @ts-ignore
+  context: webgl2Context,
   scene: [
     EncounterManager,
     // todo: UIScene
