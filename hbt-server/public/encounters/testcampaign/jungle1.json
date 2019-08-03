@@ -4,8 +4,8 @@
   "cellSize": 64,
   "shaders": [
     {
-      "key": "Grayscale",
-      "shader": "shaders/grayscale.frag"
+      "key": "Bloom",
+      "shader": "shaders/bloom.frag"
     }
   ],
   "layers": [

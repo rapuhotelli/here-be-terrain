@@ -20,12 +20,16 @@ export default class MapScene extends Phaser.Scene {
 
   effectsMap: Grid;
   encounter: IEncounter;
+  pipelines: Phaser.Renderer.WebGL.WebGLPipeline[];
+  t: number;
 
   constructor(encounter: IEncounter) {
     super({
       key: 'MapScene',
     });
     this.encounter = encounter;
+    this.pipelines = [];
+    this.t = 0;
   }
   
   
@@ -43,7 +47,9 @@ export default class MapScene extends Phaser.Scene {
     
     if (this.encounter.shaders) {
       this.encounter.shaders.map(shader => {
-        this.cameras.main.setRenderToTexture(createTextureTintPipeline(this.game, this.cache.text.get(shader.key), shader.key));
+        const pipe = createTextureTintPipeline(this.game, this.cache.text.get(shader.key), shader.key);
+        this.pipelines.push(pipe);
+        this.cameras.main.setRenderToTexture(pipe);
       });
     }
     
@@ -64,6 +70,11 @@ export default class MapScene extends Phaser.Scene {
     
     this.effectsMap = new Grid(rows, columns);
     this.effectsMap.addToScene(this, screenWidth/2, screenHeight/2, cellSize);
+  }
+  
+  update(time: number) {
+    this.t += 0.05;
+    this.pipelines.map(pipeline => pipeline.setFloat1('time', time * 0.0005));
   }
   
 }
