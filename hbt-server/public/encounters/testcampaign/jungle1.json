@@ -4,8 +4,8 @@
   "cellSize": 64,
   "shaders": [
     {
-      "key": "Bloom",
-      "shader": "shaders/bloom.frag"
+      "key": "Rain",
+      "shader": "shaders/rain.frag"
     }
   ],
   "layers": [
@@ -30,23 +30,6 @@
       "texture": "encounters/testcampaign/jungle2.png",
       "-shader": "shaders/bloom.frag",
       "active": true
-    },
-    
-    
-    {
-      "key": "bloom",
-      "type": "-delete-me-shader",
-      "resource": "shaders/bloom.frag",
-      "channel0": "ground",
-      "active": true,
-      "position": {
-        "x": 0,
-        "y": 0
-      },
-      "dimensions":{
-        "width": 1280,
-        "height": 720
-      }
     }
   ]
 }
