@@ -15,9 +15,11 @@
   },
   "dependencies": {
     "easystarjs": "^0.4.3",
-    "phaser": "3.18.1"
+    "phaser": "3.18.1",
+    "socket.io-client": "^2.2.0"
   },
   "devDependencies": {
+    "@types/socket.io-client": "^1.4.32",
     "concurrently": "^4.1.1",
     "expose-loader": "^0.7.5",
     "mkdirp": "^0.5.1",
