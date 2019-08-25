@@ -23,7 +23,7 @@
         "height": 720
       },
       "customUniforms": {
-        "movement": { "type": "2f", "value": { "x": 0.0, "y": 2.0 } }
+        "movement": { "type": "2f", "value": { "x": 0.0, "y": 0.0 } }
       }
     },
     
