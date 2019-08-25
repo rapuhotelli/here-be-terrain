@@ -21,7 +21,8 @@ export interface IEncounterLayer {
   texture?: string;
   shader?: string;
   active: boolean;
-  position?: {x: number, y: number};
+  position?: { x: number, y: number };
+  customUniforms?: { type: string, value: any };
   dimensions?: {width: number, height: number};
 }
 
@@ -93,6 +94,16 @@ export default class EncounterManager extends Phaser.Scene {
                 }
               } else if (layer.type === 'shader') {
                 this.load.glsl(layer.key, layer.shader);
+                if (layer.customUniforms) {
+                  this.load.once('complete', () => {
+                    if (this.cache.shader.has(layer.key)) {
+                      const cachedShader = this.cache.shader.get(layer.key);
+                      cachedShader.uniforms = layer.customUniforms;
+                      this.cache.shader.add(layer.key, cachedShader);
+                    }
+                  });
+                }
+                
               }
             }
           });
