@@ -1,4 +1,5 @@
 import MapScene from './map.scene';
+import * as socketIo from 'socket.io-client';
 
 // todo encounter loader from server public/encounters
 
@@ -23,17 +24,26 @@ export interface IEncounterLayer {
   active: boolean;
   position?: {x: number, y: number};
   dimensions?: {width: number, height: number};
+  customUniforms?: { type: string, value: any };
 }
 
 export default class EncounterManager extends Phaser.Scene {
   loading: number;
-  
+
+  /*
   constructor() {
     super({
       key: 'EncounterManager',
       active: true,
     });
     this.loading = 1;
+    console.log(this.data);
+  }
+  */
+
+  init(data: any) {
+    this.loading = 1;
+    console.log('encountermanager init data', data);
   }
 
   preload() {
@@ -68,9 +78,9 @@ export default class EncounterManager extends Phaser.Scene {
       });
   
       this.load.on('filecomplete', (key:any, type:any, texture:any) => {
-        if (key === 'jungle1') {
+        if (key === 'encounter') {
           
-          const encounterData: IEncounter = this.cache.json.get('jungle1');
+          const encounterData: IEncounter = this.cache.json.get('encounter');
   
           subText.setText(encounterData.name);
           subText.setPosition(screenWidth/2 - subText.getBounds().width/2, screenHeight/2 + hbdText.getBounds().height);
@@ -93,6 +103,16 @@ export default class EncounterManager extends Phaser.Scene {
                 }
               } else if (layer.type === 'shader') {
                 this.load.glsl(layer.key, layer.shader);
+                if (layer.customUniforms) {
+                  this.load.once('complete', () => {
+                    console.log('runs complete in eventmanager');
+                    if (this.cache.shader.has(layer.key)) {
+                      const cachedShader = this.cache.shader.get(layer.key);
+                      cachedShader.uniforms = layer.customUniforms;
+                      this.cache.shader.add(layer.key, cachedShader);
+                    }
+                  });
+                }
               }
             }
           });
@@ -111,7 +131,7 @@ export default class EncounterManager extends Phaser.Scene {
         }
       });
       
-      this.load.json('jungle1', 'encounters/testcampaign/jungle1.json');
+      this.load.json('encounter', 'encounters/testcampaign/jungle1.json');
       this.load.start();
 
     // MapScene.scene.moveBelow('UI', 'MapScene')
