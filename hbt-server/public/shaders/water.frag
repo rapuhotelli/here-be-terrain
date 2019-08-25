@@ -18,17 +18,20 @@ precision mediump float;
 
 uniform vec2      resolution;
 uniform float     time;
+uniform vec2      movement;
 
 void main(void) 
 {
 	float ptime = time * .5+23.0;
     // uv should be the 0-1 uv of texture...
 	vec2 uv = gl_FragCoord.xy / resolution; // iResolution.xy;
+
+  uv -= movement * time * 0.1;
     
 #ifdef SHOW_TILING
 	vec2 p = mod(uv*TAU*2.0, TAU)-250.0;
 #else
-    vec2 p = mod(uv*TAU, TAU)-250.0;
+  vec2 p = mod(uv*TAU, TAU)-250.0;
 #endif
 	vec2 i = vec2(p);
 	float c = 1.0;

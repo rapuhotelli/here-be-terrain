@@ -1,5 +1,11 @@
 import 'phaser';
+import * as socketIo from 'socket.io-client';
 import GameConfig = Phaser.Types.Core.GameConfig;
+
+const socket = socketIo.connect('/screen');
+socket.on('welcome', (data: string) => {
+  console.log(data);
+});
 
 import EncounterManager from './EncounterManager';
 
