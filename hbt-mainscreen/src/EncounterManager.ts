@@ -1,5 +1,4 @@
 import MapScene from './map.scene';
-import * as socketIo from 'socket.io-client';
 
 // todo encounter loader from server public/encounters
 
@@ -50,7 +49,7 @@ export default class EncounterManager extends Phaser.Scene {
     // todo: somehow inject the encounter-to-load here
   }
 
-  create() {
+  create(data: {encounterPath: string}) {
     let { width: screenWidth, height: screenHeight } = this.sys.game.canvas;
     
     const hbdText = this.add.text(
@@ -131,7 +130,7 @@ export default class EncounterManager extends Phaser.Scene {
         }
       });
       
-      this.load.json('encounter', 'encounters/testcampaign/jungle1.json');
+      this.load.json('encounter', `encounters/${data.encounterPath}.json`);
       this.load.start();
 
     // MapScene.scene.moveBelow('UI', 'MapScene')

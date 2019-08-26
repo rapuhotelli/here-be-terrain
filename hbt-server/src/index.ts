@@ -18,6 +18,14 @@ app.get( '/', ( req: Express.Request, res ) => {
 });
 
 
+app.get('/levelselect/:campaign/:encounter', (req, res) => {
+  if (req.params.campaign && req.params.encounter) {
+    mainScreenSocket.emit('load-encounter', `${req.params.campaign}/${req.params.encounter}`);
+    res.send('ok');
+  }
+  res.send({});
+});
+
 app.get('/levelselect/:campaign?', (req , res) => {
 
   console.log(req.params);
@@ -29,15 +37,12 @@ app.get('/levelselect/:campaign?', (req , res) => {
     });
     return;
   }
-
-
   getAllEncounterPaths((paths: any) => {
     res.send(paths);
   });
-
-
-  // res.send('');
 });
+
+
 
 app.use(express.static('public'));
 
@@ -57,9 +62,16 @@ io.of('screen')
   });
 
 
-app.get( '/e/:path', ( req: Express.Request, res ) => {
-  mainScreenSocket.emit('load-encounter', path);
+app.get( '/e/:path', ( req, res ) => {
+  if (req.params.path && mainScreenSocket) {
+    mainScreenSocket.emit('load-encounter', req.params.path);
+  }
   res.send({});
+});
+
+app.get('/reload', (req, res) => {
+  mainScreenSocket.emit('reload');
+  res.send('reload');
 });
 
 server.listen(port, () => {
