@@ -7,7 +7,7 @@
     "dev": "concurrently \"yarn:dev:*\"",
     "dev:lint": "yarn watch \"yarn lint\" ./src",
     "dev:tsc": "tsc --preserveWatchOutput -w",
-    "dev:nodemon": "nodemon --delay 1500ms",
+    "dev:nodemon": "nodemon --delay 5",
     "lint": "tslint -p \".\" -t stylish"
   },
   "dependencies": {

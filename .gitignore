@@ -19,5 +19,6 @@ hbt-dmscreen/dist/devbundle.js
 # Don't commit spoilers 8)
 hbt-server/public/encounters/*
 !hbt-server/public/encounters/testcampaign
-hbt-server/public/idle/*
-!hbt-server/public/idle/default.jpg
+hbt-server/public/modules/*
+!hbt-server/public/modules/samplecampaign
+

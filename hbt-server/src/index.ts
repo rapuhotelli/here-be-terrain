@@ -4,7 +4,7 @@ import fs from 'fs';
 import http from 'http';
 import path from 'path';
 import socketIo from 'socket.io';
-import { getAllEncounterPaths, getEncounterKeys } from './util';
+import { getAllEncounters } from './util';
 
 const app = express();
 const server = new http.Server(app);
@@ -26,8 +26,15 @@ app.get('/levelselect/:campaign/:encounter', (req, res) => {
   res.send({});
 });
 
-app.get('/levelselect/:campaign?', (req , res) => {
-
+app.get('/levelselect/:campaign?', async (req , res) => {
+  if (!req.params.campaign) {
+    await getAllEncounters().then(stuff => {
+      res.send(stuff);
+    }).catch(() => {
+      res.send('error');
+    });
+  }
+  /*
   console.log(req.params);
   if (req.params.campaign) {
     getEncounterKeys(req.params.campaign, (data) => {
@@ -40,6 +47,7 @@ app.get('/levelselect/:campaign?', (req , res) => {
   getAllEncounterPaths((paths: any) => {
     res.send(paths);
   });
+  */
 });
 
 

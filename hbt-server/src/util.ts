@@ -1,5 +1,9 @@
 import fs from 'fs';
 import path from 'path';
+import util from 'util';
+
+const readdir = util.promisify(fs.readdir);
+
 
 const scanDirectory = (directoryPath: string, callback: (fileList: string[]) => void) => {
   fs.readdir(directoryPath, function (err, files) {
@@ -11,7 +15,7 @@ const scanDirectory = (directoryPath: string, callback: (fileList: string[]) => 
 };
 
 export const getAllEncounterPaths = (callback: any) => {
-  const encounterRoot = path.join(__dirname, '..', 'public', 'encounters');
+  const encounterRoot = path.join(__dirname, '..', 'public', 'modules');
   const encounterPaths: any = [];
   scanDirectory(encounterRoot, (encounterDirectories) => {
     encounterDirectories.map(dir => {
@@ -28,6 +32,41 @@ export const getAllEncounterPaths = (callback: any) => {
     setTimeout(() => {
       callback(encounterPaths);
     }, 100);
+  });
+};
+
+const getDirectoryAsync = async (path: string): Promise<string[]> => {
+  let files;
+  try {
+    files = await readdir(path);
+    // console.log(files);
+
+  } catch (e) {
+    console.log('getDirectoryAsync error', e);
+  }
+
+  return files;
+};
+
+interface IModuleStructure {
+  [key: string]: string[];
+}
+
+export const getAllEncounters = async () => {
+  const moduleRoot = path.join(__dirname, '..', 'public', 'modules');
+  const encounters: IModuleStructure = {};
+
+  return await getDirectoryAsync(moduleRoot).then(async result => {
+    const modules = await result.map(async module => {
+      const moduleFiles = await getDirectoryAsync(path.join(moduleRoot, module, 'encounters'));
+      encounters[module] = moduleFiles
+        .filter(file => file.endsWith('.json'))
+        .map(file => file.slice(0, -5));
+      return Promise.resolve();
+    });
+
+    await Promise.all(modules);
+    return encounters;
   });
 };
 
