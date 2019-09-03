@@ -87,21 +87,22 @@ export default class EncounterManager extends Phaser.Scene {
           if (encounterData.shaders) {
             encounterData.shaders.map(shader => {
               this.loading++;
-              this.load.text(shader.key, shader.shader);
+              this.load.text(shader.key, `shaders/${shader.shader}`);
             });
+            
           }
           
           encounterData.layers.map((layer: IEncounterLayer) => {
             if (['texture', 'shader'].includes(layer.type)) {
               this.loading++;
               if (layer.type === 'texture') {
-                this.load.image(layer.key, layer.texture);
+                this.load.image(layer.key, `modules/${layer.texture}`);
                 if (layer.shader) {
                   this.loading++;
-                  this.load.glsl(layer.shader, layer.shader);
+                  this.load.glsl(layer.shader, `shaders/${layer.shader}`);
                 }
               } else if (layer.type === 'shader') {
-                this.load.glsl(layer.key, layer.shader);
+                this.load.glsl(layer.key, `shaders/${layer.shader}`);
                 if (layer.customUniforms) {
                   this.load.once('complete', () => {
                     console.log('runs complete in eventmanager');
@@ -130,7 +131,7 @@ export default class EncounterManager extends Phaser.Scene {
         }
       });
       
-      this.load.json('encounter', `encounters/${data.encounterPath}.json`);
+      this.load.json('encounter', `${data.encounterPath}.json`);
       this.load.start();
 
     // MapScene.scene.moveBelow('UI', 'MapScene')

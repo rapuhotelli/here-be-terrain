@@ -20,7 +20,7 @@ app.get( '/', ( req: Express.Request, res ) => {
 
 app.get('/levelselect/:campaign/:encounter', (req, res) => {
   if (req.params.campaign && req.params.encounter) {
-    mainScreenSocket.emit('load-encounter', `${req.params.campaign}/${req.params.encounter}`);
+    mainScreenSocket.emit('load-encounter', `modules/${req.params.campaign}/encounters/${req.params.encounter}`);
     res.send('ok');
   }
   res.send({});
@@ -61,7 +61,7 @@ io.of('dm')
     socket.emit('welcome', 'hello dm!');
   });
 
-let mainScreenSocket: any;
+let mainScreenSocket: socketIo.Socket;
 io.of('screen')
   .on('connection', function (socket) {
     console.log(`Mainscreen socket ${socket.id} connected.`);

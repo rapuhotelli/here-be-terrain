@@ -8,23 +8,5 @@
     "hbt-mainscreen",
     "hbt-dmscreen",
     "hbt-server"
-  ],
-  "dependencies": {
-    "easystarjs": "^0.4.3",
-    "phaser": "3.18.1"
-  },
-  "devDependencies": {
-    "concurrently": "^4.1.1",
-    "expose-loader": "^0.7.5",
-    "mkdirp": "^0.5.1",
-    "raw-loader": "^3.0.0",
-    "ts-loader": "^6.0.4",
-    "tslint": "^5.11.0",
-    "tslint-eslint-rules": "^5.4.0",
-    "typescript": "^3.5.3",
-    "watch": "^1.0.2",
-    "webpack": "^4.24.0",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10"
-  }
+  ]
 }

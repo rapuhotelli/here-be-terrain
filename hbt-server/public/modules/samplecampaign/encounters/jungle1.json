@@ -5,14 +5,14 @@
   "shaders": [
     {
       "key": "Rain",
-      "shader": "shaders/rain.frag"
+      "shader": "rain.frag"
     }
   ],
   "layers": [
     {
       "key": "water",
       "type": "shader",
-      "shader": "shaders/water.frag",
+      "shader": "water.frag",
       "active": true,
       "position": {
         "x": 50,
@@ -30,7 +30,7 @@
     {
       "key": "ground",
       "type": "texture",
-      "texture": "encounters/testcampaign/jungle2-small.png",
+      "texture": "samplecampaign/encounters/jungle2.png",
       "active": true
     }
   ]

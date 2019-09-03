@@ -1,0 +1,35 @@
+{
+  "name": "hbt-dmscreen",
+  "version": "0.0.1",
+  "main": "src/main.ts",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "NODE_ENV=production webpack --config ./webpack.prod.config.js",
+    "dev": "concurrently \"yarn:dev:*\"",
+    "dev:lint": "yarn watch \"yarn lint\" ./src",
+    "dev:wp": "webpack --watch --mode development",
+    "lint": "tslint -p \".\" -t stylish"
+  },
+  "dependencies": {
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "socket.io-client": "^2.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.9.0",
+    "@types/socket.io-client": "^1.4.32",
+    "concurrently": "^4.1.1",
+    "expose-loader": "^0.7.5",
+    "raw-loader": "^3.0.0",
+    "source-map-loader": "^0.2.4",
+    "ts-loader": "^6.0.4",
+    "tslint": "^5.11.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.5.3",
+    "watch": "^1.0.2",
+    "webpack": "^4.24.0",
+    "webpack-cli": "^3.1.2"
+  }
+}
