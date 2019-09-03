@@ -54,13 +54,15 @@ export default class MapScene extends Phaser.Scene {
     }
     
     this.encounter.layers.map((layer, order) => {
+      console.log(this.cache.json.get('encounter'));
       if (layer.type === 'texture') {
         const { position, dimensions } = setLayerDimensions(layer);
         if (layer.shader) {
           const shader = this.add.shader(layer.shader, position.x, position.y, dimensions.width, dimensions.height);
           shader.setChannel0(layer.key);
         } else {
-          this.add.image(position.x, position.y, layer.key);
+          const textureLayer = this.add.image(position.x, position.y, layer.key);
+          textureLayer.setDisplaySize(dimensions.width, dimensions.height);
         }
       } else if (layer.type === 'shader') {
         const { position, dimensions } = setLayerDimensions(layer);

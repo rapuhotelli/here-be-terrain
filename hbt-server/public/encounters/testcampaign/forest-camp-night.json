@@ -1,0 +1,19 @@
+{
+  "key": "smallcamp-night",
+  "name": "Small Camp, night",
+  "cellSize": 64,
+  "-shaders": [
+    {
+      "key": "Bloom",
+      "shader": "shaders/bloom.frag"
+    }
+  ],
+  "layers": [
+    {
+      "key": "ground",
+      "type": "texture",
+      "texture": "encounters/testcampaign/SmallCamp-Night1.jpg",
+      "active": true
+    }
+  ]
+}

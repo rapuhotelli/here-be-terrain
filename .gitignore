@@ -15,3 +15,10 @@ hbt-server/build/
 # Don't commit dev builds
 hbt-mainscreen/dist/devbundle.js
 hbt-dmscreen/dist/devbundle.js
+
+# Don't commit spoilers 8)
+hbt-server/public/encounters/*
+!hbt-server/public/encounters/testcampaign
+hbt-server/public/modules/*
+!hbt-server/public/modules/samplecampaign
+

@@ -1,34 +1,36 @@
 {
   "key": "jungle1",
   "name": "Jungle Test Map",
-  "cellSize": 64,
+  "cellSize": 32,
   "shaders": [
     {
       "key": "Rain",
-      "shader": "shaders/rain.frag"
+      "shader": "rain.frag"
     }
   ],
   "layers": [
     {
       "key": "water",
       "type": "shader",
-      "shader": "shaders/water.frag",
+      "shader": "water.frag",
       "active": true,
       "position": {
-        "x": 100,
+        "x": 50,
         "y": 0
       },
       "dimensions": {
-        "width": 800,
-        "height": 720
+        "width": 400,
+        "height": 360
+      },
+      "customUniforms": {
+        "movement": { "type": "2f", "value": { "x": 1.0, "y": 1.0 } }
       }
     },
     
     {
       "key": "ground",
       "type": "texture",
-      "texture": "encounters/testcampaign/jungle2.png",
-      "-shader": "shaders/bloom.frag",
+      "texture": "samplecampaign/encounters/jungle2.png",
       "active": true
     }
   ]
