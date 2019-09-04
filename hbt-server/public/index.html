@@ -2,6 +2,11 @@
 <html>
 <head>
   <style>
+      @font-face {
+          font-family: ExocetBlizzardLight;
+          src: url('assets/Exocet-Blizzard-Light.ttf');
+          font-weight:normal;
+      }
     html, body {
       margin: 0;
       padding: 0;
@@ -29,34 +34,23 @@
 </head>
 <body>
 <script>
-  /*
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.has('c') && urlParams.has('e')) {
-   */
-  
     var script = document.createElement("script");
     script.setAttribute("src", "client/main.js");
     script.onload = () => {
       document.querySelector('#splash').remove();
-    }
+    };
     document.getElementsByTagName("body")[0].appendChild(script);
-    
-    /*
-  } else {
-    
-    
-  }
-  
-     */
 </script>
 
 <div id="splash">
+    <!--
   <div>
   <h1>
     Here Be Terrain!
   </h1>
   <h2>Is loading.</h2>
   </div>
+  -->
 </div>
     
 </body>

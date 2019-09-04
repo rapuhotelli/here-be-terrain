@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    @font-face {
+      font-family: ExocetBlizzardLight;
+      src: url('assets/Exocet-Blizzard-Light.ttf');
+      font-weight:normal;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: black;
+      height: 100%;
+      font-family: cursive;
+    }
+  </style>
+</head>
+<body>
+<div style="font-family: ExocetBlizzardLight, sans-serif; font-size: 0;">1</div>
+<script>
+    var script = document.createElement("script");
+    script.setAttribute("src", "client/main.dist.js");
+
+    document.getElementsByTagName("body")[0].appendChild(script);
+</script>
+
+</body>
+</html>

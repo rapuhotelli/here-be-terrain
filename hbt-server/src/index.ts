@@ -14,7 +14,12 @@ const port = 8081;
 const pubdir = (uri: string): string => (path.join(__dirname, '..', 'public', uri));
 
 app.get( '/', ( req: Express.Request, res ) => {
-  res.sendFile(pubdir('index.html'));
+  console.log(process.env);
+  if (process.env.NODE_ENV === 'prod') {
+    res.sendFile(pubdir('index-prod.html'));
+  } else {
+    res.sendFile(pubdir('index.html'));
+  }
 });
 
 

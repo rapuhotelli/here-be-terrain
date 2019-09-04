@@ -50,6 +50,7 @@ export default class EncounterManager extends Phaser.Scene {
   }
 
   create(data: {encounterPath: string}) {
+    /*
     let { width: screenWidth, height: screenHeight } = this.sys.game.canvas;
     
     const hbdText = this.add.text(
@@ -68,7 +69,7 @@ export default class EncounterManager extends Phaser.Scene {
 
     hbdText.setPosition(screenWidth/2 - hbdText.getBounds().width/2, screenHeight/2 - hbdText.getBounds().height);
     subText.setPosition(screenWidth/2 - subText.getBounds().width/2, screenHeight/2 + hbdText.getBounds().height);
-
+    */
     // todo can we wait here for socket.io to choose the encounter to load?
     setTimeout(() => {
       
@@ -80,10 +81,12 @@ export default class EncounterManager extends Phaser.Scene {
         if (key === 'encounter') {
           
           const encounterData: IEncounter = this.cache.json.get('encounter');
-  
+
+          /*
           subText.setText(encounterData.name);
           subText.setPosition(screenWidth/2 - subText.getBounds().width/2, screenHeight/2 + hbdText.getBounds().height);
-          
+          */
+
           if (encounterData.shaders) {
             encounterData.shaders.map(shader => {
               this.loading++;

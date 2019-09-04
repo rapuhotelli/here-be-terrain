@@ -28,15 +28,41 @@ export default class ParentScene extends Phaser.Scene {
   }
 
   create() {
+
+
     if (window.location.hash) {
       const encounterPath = window.location.hash.substring(2);
       this.startScene(encounterPath);
+    } else {
+      let { width: screenWidth, height: screenHeight } = this.sys.game.canvas;
+
+      const hbdText = this.add.text(
+        screenWidth/2,
+        screenHeight/2,
+        'Here Be Terrain',
+        { fontFamily: 'ExocetBlizzardLight', fontSize: 64 },
+      );
+
+      const subText = this.add.text(
+        screenWidth/2,
+        screenHeight/2,
+        '~ Waiting for Dungeon Master ~',
+        { fontFamily: 'ExocetBlizzardLight', fontSize: 32 },
+      );
+
+      hbdText.setPosition(screenWidth/2 - hbdText.getBounds().width/2, screenHeight/2 - hbdText.getBounds().height);
+      subText.setPosition(screenWidth/2 - subText.getBounds().width/2, screenHeight/2 + subText.getBounds().height);
+
     }
     socket.on('load-encounter', (path: string) => {
       console.log('starting a scene:', path);
       window.location.href = `/#/${path}`;
       window.location.reload();
     });
+
+
+
+
   }
 
 }
