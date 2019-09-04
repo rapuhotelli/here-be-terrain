@@ -1,6 +1,8 @@
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import util from 'util';
+
 
 const readdir = util.promisify(fs.readdir);
 
@@ -85,4 +87,11 @@ export const getEncounterKeys = (campaign: string, callback: (data: any) => void
 
 export default {
   getEncounterKeys,
+};
+
+
+export const getIp = () => {
+  const ifs = Object.values(os.networkInterfaces());
+  const flat = ifs.flat().filter(f => f.family === 'IPv4' && f.internal === false);
+  return flat[0].address;
 };

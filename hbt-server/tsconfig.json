@@ -9,6 +9,9 @@
     "sourceMap": true,
     "outDir": "build",
     "baseUrl": ".",
+    "lib": [
+      "esnext.array"
+    ],
     "paths": {
       "*": [
         "../node_modules/*"

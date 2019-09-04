@@ -15,43 +15,17 @@
       height: 100%;
       font-family: cursive;
     }
-    #splash {
-      height: 100%;
-      width: 100%;
-      display: flex;
-      text-align: center;
-      color: white;
-      justify-content: center;
-      align-items: center;
-    }
-    h1 {
-      font-size: 5em;
-    }
-    h2 {
-      font-size: 2em;
-    }
+
   </style>
 </head>
 <body>
+<div style="font-family: ExocetBlizzardLight, sans-serif; font-size: 0;">1</div>
 <script>
     var script = document.createElement("script");
     script.setAttribute("src", "client/main.js");
-    script.onload = () => {
-      document.querySelector('#splash').remove();
-    };
     document.getElementsByTagName("body")[0].appendChild(script);
 </script>
 
-<div id="splash">
-    <!--
-  <div>
-  <h1>
-    Here Be Terrain!
-  </h1>
-  <h2>Is loading.</h2>
-  </div>
-  -->
-</div>
     
 </body>
 </html>

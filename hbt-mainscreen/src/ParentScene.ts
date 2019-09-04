@@ -11,6 +11,25 @@ socket.on('reload', () => {
   // window.location.reload();
 });
 
+
+const getJSON = (path: string, callback: (response: any) => void) => {
+  console.log('loading', path);
+  var request = new XMLHttpRequest();
+  request.open('GET', path, true);
+
+  request.onload = function() {
+    if (this.status >= 200 && this.status < 400) {
+      callback(JSON.parse(this.response));
+    } else {
+      console.error('bad data');
+    }
+  };
+  request.onerror = function() {
+    // There was a connection error of some sort
+  };
+  request.send();
+};
+
 export default class ParentScene extends Phaser.Scene {
   private encounterId: number;
 
@@ -29,6 +48,7 @@ export default class ParentScene extends Phaser.Scene {
 
   create() {
 
+    console.log('parentscene');
 
     if (window.location.hash) {
       const encounterPath = window.location.hash.substring(2);
@@ -50,10 +70,25 @@ export default class ParentScene extends Phaser.Scene {
         { fontFamily: 'ExocetBlizzardLight', fontSize: 32 },
       );
 
+      const ipText = this.add.text(
+        screenWidth/2,
+        screenHeight/2,
+        '',
+        { fontFamily: 'ExocetBlizzardLight', fontSize: 16 },
+      );
+
       hbdText.setPosition(screenWidth/2 - hbdText.getBounds().width/2, screenHeight/2 - hbdText.getBounds().height);
       subText.setPosition(screenWidth/2 - subText.getBounds().width/2, screenHeight/2 + subText.getBounds().height);
 
+      getJSON('/ip', (ip) => {
+        ipText.setText(ip.ip);
+        ipText.setPosition(
+          screenWidth/2 - ipText.getBounds().width/2,
+          screenHeight/2 + hbdText.getBounds().height + subText.getBounds().height,
+        );
+      });
     }
+
     socket.on('load-encounter', (path: string) => {
       console.log('starting a scene:', path);
       window.location.href = `/#/${path}`;

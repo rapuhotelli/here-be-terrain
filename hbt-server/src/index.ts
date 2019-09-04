@@ -4,17 +4,18 @@ import fs from 'fs';
 import http from 'http';
 import path from 'path';
 import socketIo from 'socket.io';
-import { getAllEncounters } from './util';
+import { getAllEncounters, getIp } from './util';
 
 const app = express();
 const server = new http.Server(app);
 const io = socketIo(server);
 const port = 8081;
 
+let ip = '0.0.0.0';
+
 const pubdir = (uri: string): string => (path.join(__dirname, '..', 'public', uri));
 
 app.get( '/', ( req: Express.Request, res ) => {
-  console.log(process.env);
   if (process.env.NODE_ENV === 'prod') {
     res.sendFile(pubdir('index-prod.html'));
   } else {
@@ -39,23 +40,7 @@ app.get('/levelselect/:campaign?', async (req , res) => {
       res.send('error');
     });
   }
-  /*
-  console.log(req.params);
-  if (req.params.campaign) {
-    getEncounterKeys(req.params.campaign, (data) => {
-      res.send({
-        data: data,
-      });
-    });
-    return;
-  }
-  getAllEncounterPaths((paths: any) => {
-    res.send(paths);
-  });
-  */
 });
-
-
 
 app.use(express.static('public'));
 
@@ -87,6 +72,12 @@ app.get('/reload', (req, res) => {
   res.send('reload');
 });
 
-server.listen(port, () => {
-  console.log( `server started at http://localhost:${ port }` );
+app.get('/ip', (req, res) => {
+  const ip = getIp();
+  res.send({ip});
 });
+
+server.listen(port, () => {
+  console.log( `server started at http://${ip}:${ port }` );
+});
+
