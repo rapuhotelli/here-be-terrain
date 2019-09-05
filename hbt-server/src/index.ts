@@ -23,15 +23,15 @@ app.get( '/', ( req: Express.Request, res ) => {
   }
 });
 
-
 app.get('/levelselect/:campaign/:encounter', (req, res) => {
   if (req.params.campaign && req.params.encounter) {
     mainScreenSocket.emit('load-encounter', `modules/${req.params.campaign}/encounters/${req.params.encounter}`);
-    res.send('ok');
+    res.send({ok: true});
+  } else {
+    res.send({ok: false});
   }
-  res.send({});
 });
-
+/*
 app.get('/levelselect/:campaign?', async (req , res) => {
   if (!req.params.campaign) {
     await getAllEncounters().then(stuff => {
@@ -41,7 +41,7 @@ app.get('/levelselect/:campaign?', async (req , res) => {
     });
   }
 });
-
+*/
 app.use(express.static('public'));
 
 io.of('dm')
