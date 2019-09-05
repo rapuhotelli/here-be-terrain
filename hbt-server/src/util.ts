@@ -92,6 +92,6 @@ export default {
 
 export const getIp = () => {
   const ifs = Object.values(os.networkInterfaces());
-  const flat = ifs.flat().filter(f => f.family === 'IPv4' && f.internal === false);
+  const flat = [].concat(...ifs).filter(f => f.family === 'IPv4' && f.internal === false);
   return flat[0].address;
 };
