@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "NODE_ENV=production webpack --config ./webpack.prod.config.js",
+    "build": "NODE_ENV=production webpack",
     "dev": "concurrently \"yarn:dev:*\"",
     "dev:lint": "yarn watch \"yarn lint\" ./src",
     "dev:wp": "webpack --watch --mode development",
