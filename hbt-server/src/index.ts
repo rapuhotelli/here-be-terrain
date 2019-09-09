@@ -1,10 +1,10 @@
 
 import express from 'express';
-import fs from 'fs';
 import http from 'http';
 import path from 'path';
 import socketIo from 'socket.io';
-import { getAllEncounters, getIp } from './util';
+import { setUpInitiativeSocket } from './initiative/socket';
+import { getIp } from './util';
 
 const app = express();
 const server = new http.Server(app);
@@ -21,6 +21,10 @@ app.get( '/', ( req: Express.Request, res ) => {
   } else {
     res.sendFile(pubdir('index.html'));
   }
+});
+
+app.get( '/dmscreen', ( req: Express.Request, res ) => {
+  res.sendFile(pubdir('dmscreen.html'));
 });
 
 app.get('/levelselect/:campaign/:encounter', (req, res) => {
@@ -47,8 +51,9 @@ app.use(express.static('public'));
 io.of('dm')
   .on('connection', function (socket) {
     console.log(`DM socket ${socket.id} connected.`);
-
     socket.emit('welcome', 'hello dm!');
+
+    setUpInitiativeSocket(socket);
   });
 
 let mainScreenSocket: socketIo.Socket;
