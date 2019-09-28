@@ -23,7 +23,7 @@ app.get( '/', ( req: Express.Request, res ) => {
   }
 });
 
-app.get( '/dmscreen', ( req: Express.Request, res ) => {
+app.get( '/dmscreen/', ( req: Express.Request, res ) => {
   res.sendFile(pubdir('dmscreen.html'));
 });
 

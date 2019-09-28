@@ -11,7 +11,7 @@ export function setUpDMEncounterSocket(socket: SocketIo.Socket) {
     socket.emit(EncounterEvents.UPDATE_LIST, encounters);
   });
 
-  socket.on(EncounterEvents.LOAD, async (path: string) => {
-    ScreenSockets.emit(EncounterEvents.LOAD, path);
+  socket.on(EncounterEvents.LOAD, async (campaign: string, encounter: string) => {
+    ScreenSockets.emit(EncounterEvents.LOAD, `modules/${campaign}/encounters/${encounter}`);
   });
 }

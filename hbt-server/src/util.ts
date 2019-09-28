@@ -17,7 +17,7 @@ const scanDirectory = (directoryPath: string, callback: (fileList: string[]) => 
 };
 
 export const getAllEncounterPaths = (callback: any) => {
-  const encounterRoot = path.join(__dirname, '..', 'public', 'modules');
+  const encounterRoot = path.join(__dirname, '..', '..', '..', 'public', 'modules');
   const encounterPaths: any = [];
   scanDirectory(encounterRoot, (encounterDirectories) => {
     encounterDirectories.map(dir => {
@@ -55,7 +55,7 @@ interface IModuleStructure {
 }
 
 export const getAllEncounters = async () => {
-  const moduleRoot = path.join(__dirname, '..', 'public', 'modules');
+  const moduleRoot = path.join(__dirname, '..', '..', '..', 'public', 'modules');
   const encounters: IModuleStructure = {};
 
   return getDirectoryAsync(moduleRoot).then(async result => {
@@ -73,7 +73,7 @@ export const getAllEncounters = async () => {
 };
 
 export const getEncounterKeys = (campaign: string, callback: (data: any) => void) => {
-  const directoryPath = path.join(__dirname, '..', 'public', 'encounters', campaign);
+  const directoryPath = path.join(__dirname, '..', '..', '..', 'public', 'encounters', campaign);
   scanDirectory(directoryPath, (files: string[]) => {
     const encounters = files
     .filter(file => file.endsWith('.json'))

@@ -46,6 +46,10 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
     socket.emit(InitiativeEvents.INIT);
   }
 
+  componentWillUnmount() {
+    socket.off(InitiativeEvents.UPDATE);
+  }
+
   setUpListeners() {
     socket.on(InitiativeEvents.UPDATE, (tracker: InitiativeTracker) => {
       this.setState({ tracker });

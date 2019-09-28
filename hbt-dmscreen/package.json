@@ -12,16 +12,18 @@
     "lint": "tslint -p \".\" -t stylish"
   },
   "dependencies": {
-    "@types/styled-components": "^4.1.19",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-router-dom": "^5.1.1",
     "socket.io-client": "^2.2.0",
     "styled-components": "^4.3.2"
   },
   "devDependencies": {
     "@types/react": "^16.9.2",
     "@types/react-dom": "^16.9.0",
+    "@types/react-router-dom": "^5.1.0",
     "@types/socket.io-client": "^1.4.32",
+    "@types/styled-components": "^4.1.19",
     "concurrently": "^4.1.1",
     "expose-loader": "^0.7.5",
     "raw-loader": "^3.0.0",
