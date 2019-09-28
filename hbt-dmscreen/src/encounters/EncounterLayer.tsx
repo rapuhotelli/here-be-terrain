@@ -229,7 +229,7 @@ export default class EncounterLayer extends Component<Props, State> {
             : undefined
           }
           { layerData
-            ? (<ActionButton onClick={this.sendToScreen}>Send to Screen</ActionButton>)
+            ? (<ActionButton onClick={this.sendToScreen}>Send Layer to Screen</ActionButton>)
             : undefined
           }
         </LayerActions>

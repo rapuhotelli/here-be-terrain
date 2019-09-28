@@ -2,8 +2,7 @@
 import express from 'express';
 import http from 'http';
 import path from 'path';
-import { EncounterEvents } from '../../hbt-common/socketIoEvents';
-import { ScreenSockets, setUpSockets } from './sockets';
+import { setUpSockets } from './sockets';
 import { getIp } from './util';
 
 const app = express();
@@ -28,11 +27,6 @@ app.get( '/dmscreen/', ( req: Express.Request, res ) => {
 });
 
 app.use(express.static('public'));
-
-app.get('/reload', (req, res) => {
-  ScreenSockets.emit('reload');
-  res.send('reload');
-});
 
 app.get('/ip', (req, res) => {
   const ip = getIp();

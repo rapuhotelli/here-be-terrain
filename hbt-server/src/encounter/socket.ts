@@ -31,6 +31,10 @@ export function setUpDMEncounterSocket(socket: SocketIo.Socket) {
   socket.on(EncounterEvents.LAYER_UPDATE, (campaign: string, encounter: string, layerId: string, pngDataUrl: string) => {
     ScreenSockets.emit(EncounterEvents.LAYER_UPDATE, encounterPath(campaign, encounter), layerId, pngDataUrl);
   });
+
+  socket.on(EncounterEvents.RELOAD, () => {
+    ScreenSockets.emit(EncounterEvents.RELOAD);
+  });
 }
 
 export function setUpScreenEncounterSocket(socket: SocketIo.Socket) {

@@ -18,4 +18,5 @@ export const EncounterEvents = {
   LOAD: 'encounter:load',
   SHOW: 'encounter:show',
   READY: 'encounter:ready',
+  RELOAD: 'encounter:reload',
 };

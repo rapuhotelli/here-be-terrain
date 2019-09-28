@@ -8,6 +8,11 @@ import { Button } from '../styled_components/Button';
 import { Section, SectionTitle } from '../styled_components/Section';
 import SelectedEncounter from './SelectedEncounter';
 
+const ReloadScreenButton = styled(Button)`
+  display: block;
+  margin-bottom: 8px;
+`;
+
 const EncounterButton = styled(Button)`
   display: block;
   margin: 8px 8px;
@@ -46,6 +51,7 @@ export default class EncounterLoader extends Component<Object, State> {
     };
 
     this.loadEncounter = this.loadEncounter.bind(this);
+    this.reloadScreen = this.reloadScreen.bind(this);
   }
   componentDidMount() {
     socket.on(EncounterEvents.LIST_UPDATE, (data: Campaigns) => {
@@ -70,6 +76,10 @@ export default class EncounterLoader extends Component<Object, State> {
     });
     socket.emit(EncounterEvents.LOAD, campaign, encounter);
   }
+  
+  reloadScreen() {
+    socket.emit(EncounterEvents.RELOAD);
+  }
 
   render() {
     const {
@@ -83,6 +93,7 @@ export default class EncounterLoader extends Component<Object, State> {
         <SectionTitle main>Encounter Loader</SectionTitle>
         <FlexContainer>
           <EncounterList>
+            <ReloadScreenButton onClick={this.reloadScreen}>Reload Screen</ReloadScreenButton>
             {Object.keys(campaigns).map((campaignName) => {
               const encounters = campaigns[campaignName];
               return (
