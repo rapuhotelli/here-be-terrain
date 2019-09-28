@@ -1,16 +1,8 @@
 import SocketIo from 'socket.io';
 
-import InitiativeTracker, { CreatureInitiative } from './InitiativeTracker';
+import { InitiativeEvents } from '../../../hbt-common/socketIoEvents';
 
-export const InitiativeEvents = {
-  INIT: 'initiative:init',
-  UPDATE: 'initiative:update',
-  ADD_CREATURE: 'initiative:add_creature',
-  DELETE_CREATURE: 'initiative:delete_creature',
-  NEXT: 'initiative:next',
-  PREVIOUS: 'initiative:previous',
-  SET_POSITION: 'initiative:set_position',
-};
+import InitiativeTracker, { CreatureInitiative } from './InitiativeTracker';
 
 export function setUpInitiativeSocket(socket: SocketIo.Socket) {
   let tracker: InitiativeTracker = new InitiativeTracker();

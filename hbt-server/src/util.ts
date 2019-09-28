@@ -58,7 +58,7 @@ export const getAllEncounters = async () => {
   const moduleRoot = path.join(__dirname, '..', 'public', 'modules');
   const encounters: IModuleStructure = {};
 
-  return await getDirectoryAsync(moduleRoot).then(async result => {
+  return getDirectoryAsync(moduleRoot).then(async result => {
     const modules = await result.map(async module => {
       const moduleFiles = await getDirectoryAsync(path.join(moduleRoot, module, 'encounters'));
       encounters[module] = moduleFiles

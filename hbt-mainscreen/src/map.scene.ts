@@ -23,16 +23,16 @@ export default class MapScene extends Phaser.Scene {
   pipelines: Phaser.Renderer.WebGL.WebGLPipeline[];
   t: number;
 
-  constructor(encounter: IEncounter) {
-    super({
-      key: 'MapScene',
-    });
+  constructor(
+    encounter: IEncounter,
+    sceneConfig: string | Phaser.Types.Scenes.SettingsConfig = { key: 'MapScene' },
+  ) {
+    super(sceneConfig);
     this.encounter = encounter;
     this.pipelines = [];
     this.t = 0;
   }
-  
-  
+
   preload() {
 
   }

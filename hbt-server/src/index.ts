@@ -2,18 +2,18 @@
 import express from 'express';
 import http from 'http';
 import path from 'path';
-import socketIo from 'socket.io';
-import { setUpInitiativeSocket } from './initiative/socket';
+import { EncounterEvents } from '../../hbt-common/socketIoEvents';
+import { ScreenSockets, setUpSockets } from './sockets';
 import { getIp } from './util';
 
 const app = express();
 const server = new http.Server(app);
-const io = socketIo(server);
+setUpSockets(server);
 const port = 8081;
 
 let ip = '0.0.0.0';
 
-const pubdir = (uri: string): string => (path.join(__dirname, '..', 'public', uri));
+const pubdir = (uri: string): string => (path.join(__dirname, '..', '..', '..', 'public', uri));
 
 app.get( '/', ( req: Express.Request, res ) => {
   if (process.env.NODE_ENV === 'prod') {
@@ -29,7 +29,7 @@ app.get( '/dmscreen', ( req: Express.Request, res ) => {
 
 app.get('/levelselect/:campaign/:encounter', (req, res) => {
   if (req.params.campaign && req.params.encounter) {
-    mainScreenSocket.emit('load-encounter', `modules/${req.params.campaign}/encounters/${req.params.encounter}`);
+    ScreenSockets.emit(EncounterEvents.LOAD, `modules/${req.params.campaign}/encounters/${req.params.encounter}`);
     res.send({ok: true});
   } else {
     res.send({ok: false});
@@ -48,32 +48,16 @@ app.get('/levelselect/:campaign?', async (req , res) => {
 */
 app.use(express.static('public'));
 
-io.of('dm')
-  .on('connection', function (socket) {
-    console.log(`DM socket ${socket.id} connected.`);
-    socket.emit('welcome', 'hello dm!');
 
-    setUpInitiativeSocket(socket);
-  });
-
-let mainScreenSocket: socketIo.Socket;
-io.of('screen')
-  .on('connection', function (socket) {
-    console.log(`Mainscreen socket ${socket.id} connected.`);
-    mainScreenSocket = socket;
-    socket.emit('welcome', 'hello mainscreen!');
-  });
-
-
-app.get( '/e/:path', ( req, res ) => {
-  if (req.params.path && mainScreenSocket) {
-    mainScreenSocket.emit('load-encounter', req.params.path);
+app.get('/e/:path', (req, res) => {
+  if (req.params.path) {
+    ScreenSockets.emit(EncounterEvents.LOAD, req.params.path);
   }
   res.send({});
 });
 
 app.get('/reload', (req, res) => {
-  mainScreenSocket.emit('reload');
+  ScreenSockets.emit('reload');
   res.send('reload');
 });
 

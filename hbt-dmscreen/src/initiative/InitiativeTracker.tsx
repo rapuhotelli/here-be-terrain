@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+import { InitiativeEvents } from '../../../hbt-common/socketIoEvents';
 import InitiativeTracker, { CreatureInitiative } from '../../../hbt-server/src/initiative/InitiativeTracker';
-import { InitiativeEvents } from '../../../hbt-server/src/initiative/socket';
 
 import socket from '../socket';
 import { Section, SectionTitle } from '../styled_components/Section';
