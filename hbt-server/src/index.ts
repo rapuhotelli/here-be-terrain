@@ -27,34 +27,7 @@ app.get( '/dmscreen/', ( req: Express.Request, res ) => {
   res.sendFile(pubdir('dmscreen.html'));
 });
 
-app.get('/levelselect/:campaign/:encounter', (req, res) => {
-  if (req.params.campaign && req.params.encounter) {
-    ScreenSockets.emit(EncounterEvents.LOAD, `modules/${req.params.campaign}/encounters/${req.params.encounter}`);
-    res.send({ok: true});
-  } else {
-    res.send({ok: false});
-  }
-});
-/*
-app.get('/levelselect/:campaign?', async (req , res) => {
-  if (!req.params.campaign) {
-    await getAllEncounters().then(stuff => {
-      res.send(stuff);
-    }).catch(() => {
-      res.send('error');
-    });
-  }
-});
-*/
 app.use(express.static('public'));
-
-
-app.get('/e/:path', (req, res) => {
-  if (req.params.path) {
-    ScreenSockets.emit(EncounterEvents.LOAD, req.params.path);
-  }
-  res.send({});
-});
 
 app.get('/reload', (req, res) => {
   ScreenSockets.emit('reload');
