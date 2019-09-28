@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const baseButtonStyles = `
   cursor: pointer;
@@ -21,4 +21,13 @@ export const baseButtonStyles = `
 
 export const Button = styled.button`
 ${baseButtonStyles}
+
+  ${(props: { active?: boolean }) => props.active && css`
+    &,
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: lightsalmon;
+    }
+  `}
 `;

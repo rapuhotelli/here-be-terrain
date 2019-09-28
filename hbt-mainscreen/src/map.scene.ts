@@ -1,4 +1,5 @@
-import { IEncounter, IEncounterLayer } from './EncounterManager';
+import { IEncounter, IEncounterLayer } from '../../hbt-common/interfaces';
+
 import { Grid } from './grid';
 import { DEFAULT_CELL_SIZE, DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y } from './params';
 import { createTextureTintPipeline } from './pipelines';
@@ -54,7 +55,6 @@ export default class MapScene extends Phaser.Scene {
     }
     
     this.encounter.layers.map((layer, order) => {
-      console.log(this.cache.json.get('encounter'));
       if (layer.type === 'texture') {
         const { position, dimensions } = setLayerDimensions(layer);
         if (layer.shader) {

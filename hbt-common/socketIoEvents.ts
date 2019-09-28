@@ -9,7 +9,13 @@ export const InitiativeEvents = {
 };
 
 export const EncounterEvents = {
-  LOAD_LIST: 'encounter:list:load',
-  UPDATE_LIST: 'encounter:list:update',
+  LIST_LOAD: 'encounter:list:load',
+  LIST_UPDATE: 'encounter:list:update',
+  DATA_GET: 'encounter:data:get',
+  DATA_SEND: 'encounter:data:send',
+  LAYER_UPDATE: 'encounter:layer:update',
+  LAYER_REMOVE: 'encounter:layer:remove',
   LOAD: 'encounter:load',
+  SHOW: 'encounter:show',
+  READY: 'encounter:ready',
 };

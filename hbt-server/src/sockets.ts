@@ -1,6 +1,6 @@
 import http from 'http';
 import SocketIo from 'socket.io';
-import { setUpDMEncounterSocket } from './encounter/socket';
+import { setUpDMEncounterSocket, setUpScreenEncounterSocket } from './encounter/socket';
 import { setUpInitiativeSocket } from './initiative/socket';
 
 export const SocketNamespace = {
@@ -27,5 +27,7 @@ export function setUpSockets(server: http.Server) {
   ScreenSockets.on('connection', function (socket) {
     console.log(`Mainscreen socket ${socket.id} connected.`);
     socket.emit('welcome', 'hello mainscreen!');
+
+    setUpScreenEncounterSocket(socket);
   });
 }

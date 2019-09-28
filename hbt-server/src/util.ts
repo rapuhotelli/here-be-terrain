@@ -5,7 +5,7 @@ import util from 'util';
 
 
 const readdir = util.promisify(fs.readdir);
-
+const readFile = util.promisify(fs.readFile);
 
 const scanDirectory = (directoryPath: string, callback: (fileList: string[]) => void) => {
   fs.readdir(directoryPath, function (err, files) {
@@ -72,23 +72,11 @@ export const getAllEncounters = async () => {
   });
 };
 
-export const getEncounterKeys = (campaign: string, callback: (data: any) => void) => {
-  const directoryPath = path.join(__dirname, '..', '..', '..', 'public', 'encounters', campaign);
-  scanDirectory(directoryPath, (files: string[]) => {
-    const encounters = files
-    .filter(file => file.endsWith('.json'))
-    .map(file => {
-      const encounterData = <string><unknown>fs.readFileSync(path.join(directoryPath, file));
-      return JSON.parse(encounterData);
-    });
-    callback(encounters);
-  });
+export const getEncounterData = async (campaign: string, encounter: string) => {
+  const filePath = path.join(__dirname, '..', '..', '..', 'public', 'modules', campaign, 'encounters', `${encounter}.json`);
+  const filecontent = await readFile(filePath, 'utf8');
+  return JSON.parse(filecontent);
 };
-
-export default {
-  getEncounterKeys,
-};
-
 
 export const getIp = () => {
   const ifs = Object.values(os.networkInterfaces());
