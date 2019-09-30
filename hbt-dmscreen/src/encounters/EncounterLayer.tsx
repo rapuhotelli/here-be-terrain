@@ -84,7 +84,7 @@ export default class EncounterLayer extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.loadStoredData();
+    this.loadStoredData(true);
 
     const canvas = this.canvasRef.current;
     if (!canvas) return;
@@ -117,16 +117,22 @@ export default class EncounterLayer extends Component<Props, State> {
     this.setState({ layerData, hasStoredData: true });
   }
 
-  loadStoredData() {
+  loadStoredData(sendToScreen = false) {
     const { campaign, encounter, layerId } = this.props;
 
     const hasStoredData = hasLayerData(campaign, encounter, layerId);
     const layerData = getLayerData(campaign, encounter, layerId);
 
-    this.setState({ layerData, hasStoredData }, () => this.drawData());
+    this.setState({ layerData, hasStoredData }, () => {
+      this.drawData(() => {
+        if (hasStoredData && sendToScreen) {
+          this.sendToScreen();
+        }
+      });
+    });
   }
 
-  drawData() {
+  drawData(afterDrawCallback = () => {}) {
     const { layerData } = this.state;
     if (!layerData) return;
   
@@ -139,7 +145,10 @@ export default class EncounterLayer extends Component<Props, State> {
 
     const image = new Image;
     image.src = layerData;
-    image.onload = () => ctx.drawImage(image, 0, 0);
+    image.onload = () => {
+      ctx.drawImage(image, 0, 0);
+      afterDrawCallback();
+    };
   }
 
   fillLayer() {
@@ -239,7 +248,7 @@ export default class EncounterLayer extends Component<Props, State> {
             : undefined
           }
           { hasStoredData
-            ? (<ActionButton onClick={this.loadStoredData}>Load Stored Data</ActionButton>)
+            ? (<ActionButton onClick={() => this.loadStoredData()}>Load Stored Data</ActionButton>)
             : undefined
           }
           { layerData
