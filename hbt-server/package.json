@@ -1,7 +1,7 @@
 {
   "name": "hbt-server",
   "version": "1.0.0",
-  "main": "build/index.js",
+  "main": "build/hbt-server/src/index.js",
   "license": "MIT",
   "scripts": {
     "dev": "concurrently \"yarn:dev:*\"",
@@ -21,6 +21,6 @@
     "nodemon": "^1.19.1",
     "tslint": "^5.18.0",
     "tslint-eslint-rules": "^5.4.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.3"
   }
 }

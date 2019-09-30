@@ -11,9 +11,10 @@
     "esModuleInterop": true
   },
   "include": [
-    "src"
+    "src",
+    "../hbt-common"
   ],
   "exclude": [
-    "node_modules",
-  ],
+    "node_modules"
+  ]
 }

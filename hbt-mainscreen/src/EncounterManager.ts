@@ -1,148 +1,140 @@
 import MapScene from './map.scene';
+import SplashscreenScene from './SplashscreenScene';
 
-// todo encounter loader from server public/encounters
-
-export interface IEncounter {
-  key: string;
-  name: string;
-  cellSize?: number;
-  shaders: IEncounterShader[];
-  layers: IEncounterLayer[];
-}
-
-export interface IEncounterShader {
-  key: string;
-  shader: string;
-}
-
-export interface IEncounterLayer {
-  key: string;
-  type: 'texture' | 'shader';
-  texture?: string;
-  shader?: string;
-  active: boolean;
-  position?: {x: number, y: number};
-  dimensions?: {width: number, height: number};
-  customUniforms?: { type: string, value: any };
-}
+import { IEncounter, IEncounterLayer } from '../../hbt-common/interfaces';
+import { EncounterEvents } from '../../hbt-common/socketIoEvents';
+import { DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y } from './params';
+import socket from './socket';
 
 export default class EncounterManager extends Phaser.Scene {
-  loading: number;
+  private currentSceneId: string;
 
-  /*
-  constructor() {
-    super({
-      key: 'EncounterManager',
-      active: true,
+  create() {
+    // load first scene
+    const splashscreenId = 'scene.splashscreen';
+    const splashscreenScene = new SplashscreenScene({ key: splashscreenId });
+    this.game.scene.add(splashscreenId, splashscreenScene, true);
+    this.currentSceneId = splashscreenId;
+
+    // set up loader
+    socket.on(EncounterEvents.LOAD, (path: string) => {
+      this.loadScene(path);
     });
-    this.loading = 1;
-    console.log(this.data);
+    socket.on(EncounterEvents.SHOW, (path: string) => {
+      this.showScene(path);
+    });
+    socket.on(EncounterEvents.LAYER_UPDATE, (path: string, layerId: string, pngDataUrl: string) => {
+      this.addLayerToScene(path, layerId, pngDataUrl);
+    });
   }
-  */
-
-  init(data: any) {
-    this.loading = 1;
-    console.log('encountermanager init data', data);
-  }
-
-  preload() {
-    // todo: somehow inject the encounter-to-load here
-  }
-
-  create(data: {encounterPath: string}) {
-    /*
-    let { width: screenWidth, height: screenHeight } = this.sys.game.canvas;
-    
-    const hbdText = this.add.text(
-      screenWidth/2,
-      screenHeight/2,
-      'Here Be Terrain!',
-      { fontFamily: 'cursive', fontSize: 72 },
-    );
-    
-    const subText = this.add.text(
-      screenWidth/2,
-      screenHeight/2,
-      '~ Is waiting for Dungeon Master ~',
-      { fontFamily: 'cursive', fontSize: 32 },
-    );
-
-    hbdText.setPosition(screenWidth/2 - hbdText.getBounds().width/2, screenHeight/2 - hbdText.getBounds().height);
-    subText.setPosition(screenWidth/2 - subText.getBounds().width/2, screenHeight/2 + hbdText.getBounds().height);
-    */
-    // todo can we wait here for socket.io to choose the encounter to load?
-    setTimeout(() => {
-      
-      this.load.on('progress', (value:any) => {
-        console.log(value);
-      });
   
-      this.load.on('filecomplete', (key:any, type:any, texture:any) => {
-        if (key === 'encounter') {
-          
-          const encounterData: IEncounter = this.cache.json.get('encounter');
+  showScene(path: string) {
+    const newSceneId = `scene.${path}`;
+    const sceneManager: Phaser.Scenes.SceneManager = this.game.scene;
 
-          /*
-          subText.setText(encounterData.name);
-          subText.setPosition(screenWidth/2 - subText.getBounds().width/2, screenHeight/2 + hbdText.getBounds().height);
-          */
+    if (newSceneId === this.currentSceneId) return;
+    if (sceneManager.getIndex(newSceneId) < 0) {
+      return this.loadScene(path, true);
+    }
 
-          if (encounterData.shaders) {
-            encounterData.shaders.map(shader => {
-              this.loading++;
-              this.load.text(shader.key, `shaders/${shader.shader}`);
-            });
-            
-          }
-          
-          encounterData.layers.map((layer: IEncounterLayer) => {
-            if (['texture', 'shader'].includes(layer.type)) {
-              this.loading++;
-              if (layer.type === 'texture') {
-                this.load.image(layer.key, `modules/${layer.texture}`);
-                if (layer.shader) {
-                  this.loading++;
-                  this.load.glsl(layer.shader, `shaders/${layer.shader}`);
-                }
-              } else if (layer.type === 'shader') {
-                this.load.glsl(layer.key, `shaders/${layer.shader}`);
-                if (layer.customUniforms) {
-                  this.load.once('complete', () => {
-                    console.log('runs complete in eventmanager');
-                    if (this.cache.shader.has(layer.key)) {
-                      const cachedShader = this.cache.shader.get(layer.key);
-                      cachedShader.uniforms = layer.customUniforms;
-                      this.cache.shader.add(layer.key, cachedShader);
-                    }
-                  });
-                }
-              }
+    this.changeToScene(newSceneId);
+  }
+
+  loadScene(path: string, showWhenReady: boolean = false) {
+    const newSceneId = `scene.${path}`;
+    const newEncounterId = `encounter.${path}`;
+    const sceneManager: Phaser.Scenes.SceneManager = this.game.scene;
+    let map: Phaser.Scene;
+
+    if (newSceneId === this.currentSceneId) {
+      socket.emit(EncounterEvents.READY);
+      return;
+    }
+
+    if (sceneManager.getIndex(newSceneId) >= 0) {
+      socket.emit(EncounterEvents.READY);
+      if (showWhenReady) {
+        this.changeToScene(newSceneId);
+      }
+      return;
+    }
+      
+    // this.load.on('progress', (value: any) => {
+    //   console.log(value);
+    // });
+
+    this.load.once('filecomplete', () => {
+      const encounterData: IEncounter = this.cache.json.get(newEncounterId);
+
+      if (encounterData.shaders) {
+        encounterData.shaders.map(shader => {
+          this.load.text(shader.key, `shaders/${shader.shader}`);
+        });
+      }
+      
+      encounterData.layers.map((layer: IEncounterLayer) => {
+        if (['texture', 'shader'].includes(layer.type)) {
+          if (layer.type === 'texture') {
+            this.load.image(layer.key, `modules/${layer.texture}`);
+            if (layer.shader) {
+              this.load.glsl(layer.shader, `shaders/${layer.shader}`);
             }
-          });
-  
-          const map = new MapScene(encounterData);
-          this.scene.add('MapScene', map, false);
-        }
-        this.loading--;
-        
-        console.log('loaded:', key);
-        
-        if (this.loading === 0) {
-          // todo this is where we would wait for DM to start the encounter (with socket io)
-          this.scene.start('MapScene');
-            
+          } else if (layer.type === 'shader') {
+            this.load.glsl(layer.key, `shaders/${layer.shader}`);
+            if (layer.customUniforms) {
+              this.load.once('complete', () => {
+                if (this.cache.shader.has(layer.key)) {
+                  const cachedShader = this.cache.shader.get(layer.key);
+                  cachedShader.uniforms = layer.customUniforms;
+                  this.cache.shader.add(layer.key, cachedShader);
+                }
+              });
+            }
+          }
         }
       });
-      
-      this.load.json('encounter', `${data.encounterPath}.json`);
-      this.load.start();
 
-    // MapScene.scene.moveBelow('UI', 'MapScene')
-    }, 300);
+      map = new MapScene(encounterData, { key: newSceneId });
+    });
 
+    this.load.once('complete', () => {
+      if (map) {
+        sceneManager.add(newSceneId, map, false);
+        socket.emit(EncounterEvents.READY);
+      }
+      if (showWhenReady) {
+        this.changeToScene(newSceneId);
+      }
+    });
+    
+    this.load.json(newEncounterId, `${path}.json`);
+    this.load.start();
   }
 
-  update() {
+  addLayerToScene(path: string, layerId: string, pngDataUrl: string) {
+    const sceneId = `scene.${path}`;
+    const sceneManager: Phaser.Scenes.SceneManager = this.game.scene;
+    const imageId = `${sceneId}/${layerId}`;
+    const scene = sceneManager.getScene(sceneId);
+    if (this.textures.exists(imageId)) {
+      const child = scene.children.getByName(imageId);
+      if (child) scene.children.remove(child);
+      this.textures.remove(imageId);
+      this.textures.addBase64(imageId, pngDataUrl);
+    } else {
+      this.textures.addBase64(imageId, pngDataUrl);
+    }
+    this.textures.once('addtexture', () => {
+      const img = scene.add.image(DEFAULT_RESOLUTION_X / 2, DEFAULT_RESOLUTION_Y / 2, imageId);
+      img.setName(imageId);
+      img.setDisplaySize(DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y);
+      img.setDepth(1);
+    });
+  }
 
+  changeToScene(sceneId: string) {
+    const sceneManager: Phaser.Scenes.SceneManager = this.game.scene;
+    sceneManager.switch(this.currentSceneId, sceneId);
+    this.currentSceneId = sceneId;
   }
 }

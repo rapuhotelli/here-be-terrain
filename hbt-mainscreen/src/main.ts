@@ -1,12 +1,8 @@
 import 'phaser';
 
+import EncounterManager from './EncounterManager';
 import GameConfig = Phaser.Types.Core.GameConfig;
 import { DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y } from './params';
-
-
-
-import EncounterManager from './EncounterManager';
-import ParentScene from './ParentScene';
 
 var webgl2Canvas = document.createElement('canvas');
 webgl2Canvas.id = 'webgl2Canvas';
@@ -30,21 +26,16 @@ export class Game extends Phaser.Game {
   constructor(config: GameConfig) {
     super(config);
     console.log('I am Game');
-
   }
 }
 
-//window.onload = () => {
-  
 const game = new Game({
   type: Phaser.WEBGL,
   canvas: webgl2Canvas,
   // @ts-ignore
   context: webgl2Context,
-  scene: [
-    ParentScene,
-    // todo: UISceneju
-  ],
+
+  scene: EncounterManager,
 
   width: DEFAULT_RESOLUTION_X,
   height: DEFAULT_RESOLUTION_Y,
@@ -53,4 +44,3 @@ const game = new Game({
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
 });
-//};
