@@ -5,6 +5,7 @@ import { EncounterEvents } from '../../../hbt-common/socketIoEvents';
 
 import socket from '../socket';
 import { Button } from '../styled_components/Button';
+import { SectionTitle } from '../styled_components/Section';
 
 import { getLayerData, hasLayerData, saveLayerData } from './EncounterLayerStorage';
 
@@ -38,6 +39,12 @@ const LayerActions = styled.div`
 
 const ActionButton = styled(Button)`
   margin: 4px;
+`;
+
+const ActionsTitle = styled(SectionTitle)`
+  text-transform: capitalize;
+  margin-top: 8px;
+  margin-left: 4px;
 `;
 
 interface Props {
@@ -197,6 +204,8 @@ export default class EncounterLayer extends Component<Props, State> {
     } else if (drawMode === DrawMode.ERASE) {
       ctx.clearRect(eventPos[0] - 3, eventPos[1] - 3, 8, 8);
     }
+
+    this.setState({ layerData: canvas.toDataURL() });    
   }
 
   sendToScreen() {
@@ -210,12 +219,14 @@ export default class EncounterLayer extends Component<Props, State> {
   }
 
   render() {
+    const { layerId } = this.props;
     const { hasStoredData, layerData, drawMode } = this.state;
     return (
       <div>
         <Canvas ref={this.canvasRef} width={canvasRes.width} height={canvasRes.height}
           onMouseMove={this.draw} onTouchMove={this.draw}></Canvas>
         <LayerActions>
+          <ActionsTitle>{layerId} layer actions:</ActionsTitle>
           <ActionButton active={drawMode === DrawMode.DRAW} onClick={() => this.selectDrawMode(DrawMode.DRAW)}>Draw</ActionButton>
           <ActionButton active={drawMode === DrawMode.ERASE} onClick={() => this.selectDrawMode(DrawMode.ERASE)}>Erase</ActionButton>
           <ActionButton onClick={this.fillLayer}>Fill layer</ActionButton>

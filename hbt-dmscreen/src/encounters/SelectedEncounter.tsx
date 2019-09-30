@@ -69,10 +69,11 @@ export default class SelectedEncounter extends Component<Props, State> {
     return (
       <Section>
         <SectionTitle>{encounter}</SectionTitle>
-        <ActionsContainer>
+        <ActionsContainer> 
           <Button onClick={this.showSelectedEncounterOnScreen}>
             Show to screen
           </Button>
+          &nbsp;&lt;-- CLICK THIS TO SHOW THIS ENCOUNTER TO THE SCREEN
         </ActionsContainer>
         <CanvasContainer>
           {encounterData

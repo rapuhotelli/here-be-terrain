@@ -11,7 +11,7 @@ const LabelText = styled.div`
 `;
 const Input = styled.input`
   flex: 1;
-  padding: 2px 4px;
+  padding: 8px 4px;
 
   ${(props: { withMargin?: boolean }) => props.withMargin && css`
     margin-bottom: 6px;

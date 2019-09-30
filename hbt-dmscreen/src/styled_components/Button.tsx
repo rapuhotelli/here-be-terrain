@@ -5,7 +5,7 @@ export const baseButtonStyles = `
   border: 1px solid darkgray;
   background-color: lightgray;
   border-radius: 2px;
-  padding: 2px 12px;
+  padding: 8px 16px;
   text-decoration: none;
   color: black;
 

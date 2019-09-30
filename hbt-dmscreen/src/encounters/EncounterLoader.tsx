@@ -79,6 +79,11 @@ export default class EncounterLoader extends Component<Object, State> {
   
   reloadScreen() {
     socket.emit(EncounterEvents.RELOAD);
+    this.setState({
+      selectedCampaign: undefined,
+      selectedEncounter: undefined,
+      selectedEncounterReady: false,
+    });
   }
 
   render() {
