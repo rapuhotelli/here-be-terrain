@@ -26,6 +26,7 @@ const Canvas = styled.canvas`
   height: 100%;
   width: 100%;
   z-index: 2;
+  touch-action: none;
 
   opacity: 0.6;
 `;
@@ -133,6 +134,8 @@ export default class EncounterLayer extends Component<Props, State> {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const image = new Image;
     image.src = layerData;
