@@ -17,39 +17,40 @@ const getJSON = (path: string, callback: (response: any) => void) => {
 };
 
 export default class SplashscreenScene extends Phaser.Scene {
+
+  preload() {
+    this.load.bitmapFont('gothic', 'assets/gothic.png', 'assets/gothic.xml');
+  }
+
   create() {
     let { width: screenWidth, height: screenHeight } = this.sys.game.canvas;
 
-    const hbdText = this.add.text(
+    this.add.bitmapText(
       screenWidth/2,
-      screenHeight/2,
+      screenHeight/3,
+      'gothic',
       'Here Be Terrain',
-      { fontFamily: 'ExocetBlizzardLight', fontSize: 64 },
-    );
+      30,
+      ).setOrigin(0.5).setCenterAlign();
 
-    const subText = this.add.text(
+    const subText = this.add.bitmapText(
       screenWidth/2,
       screenHeight/2,
+      'gothic',
       '~ Waiting for Dungeon Master ~',
-      { fontFamily: 'ExocetBlizzardLight', fontSize: 32 },
-    );
+      20,
+    ).setOrigin(0.5).setCenterAlign();
 
-    const ipText = this.add.text(
+    const ipText = this.add.bitmapText(
       screenWidth/2,
-      screenHeight/2,
+      (screenHeight/4)*3,
+      'gothic',
       '',
-      { fontFamily: 'ExocetBlizzardLight', fontSize: 16 },
-    );
-
-    hbdText.setPosition(screenWidth/2 - hbdText.getBounds().width/2, screenHeight/2 - hbdText.getBounds().height);
-    subText.setPosition(screenWidth/2 - subText.getBounds().width/2, screenHeight/2 + subText.getBounds().height);
+      20,
+    ).setOrigin(0.5).setCenterAlign();
 
     getJSON('/ip', (ip) => {
       ipText.setText(ip.ip);
-      ipText.setPosition(
-        screenWidth/2 - ipText.getBounds().width/2,
-        screenHeight/2 + hbdText.getBounds().height + subText.getBounds().height,
-      );
     });
   }
 
