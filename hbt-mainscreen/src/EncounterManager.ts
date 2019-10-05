@@ -6,6 +6,13 @@ import { EncounterEvents } from '../../hbt-common/socketIoEvents';
 import { DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y } from './params';
 import socket from './socket';
 
+const AvailableShaders = [
+  'fogofwar',
+  'fire',
+  'lava',
+  'water',
+];
+
 export default class EncounterManager extends Phaser.Scene {
   private currentSceneId: string;
 
@@ -25,6 +32,16 @@ export default class EncounterManager extends Phaser.Scene {
     });
     socket.on(EncounterEvents.LAYER_UPDATE, (path: string, layerId: string, pngDataUrl: string) => {
       this.addLayerToScene(path, layerId, pngDataUrl);
+    });
+  }
+
+  preload() {
+    AvailableShaders.forEach((key) => {
+      const filename = `${key}.frag`;
+      this.load.glsl(key, `shaders/${filename}`);
+    });
+    this.load.once('complete', () => {
+      console.log('shaders loaded!', this.cache.shader.entries.keys());
     });
   }
   
@@ -80,15 +97,23 @@ export default class EncounterManager extends Phaser.Scene {
               this.load.glsl(layer.shader, `shaders/${layer.shader}`);
             }
           } else if (layer.type === 'shader') {
-            this.load.glsl(layer.key, `shaders/${layer.shader}`);
-            if (layer.customUniforms) {
-              this.load.once('complete', () => {
-                if (this.cache.shader.has(layer.key)) {
-                  const cachedShader = this.cache.shader.get(layer.key);
-                  cachedShader.uniforms = layer.customUniforms;
-                  this.cache.shader.add(layer.key, cachedShader);
-                }
-              });
+            if (this.cache.shader.has(layer.key)) {
+              if (layer.customUniforms) {
+                const cachedShader = this.cache.shader.get(layer.key);
+                cachedShader.uniforms = layer.customUniforms;
+                this.cache.shader.add(layer.key, cachedShader);
+              }
+            } else if(layer.shader) {
+              this.load.glsl(layer.key, `shaders/${layer.shader}`);
+              if (layer.customUniforms) {
+                this.load.once('complete', () => {
+                  if (this.cache.shader.has(layer.key)) {
+                    const cachedShader = this.cache.shader.get(layer.key);
+                    cachedShader.uniforms = layer.customUniforms;
+                    this.cache.shader.add(layer.key, cachedShader);
+                  }
+                });
+              }
             }
           }
         }
@@ -125,10 +150,14 @@ export default class EncounterManager extends Phaser.Scene {
       this.textures.addBase64(imageId, pngDataUrl);
     }
     this.textures.once('addtexture', () => {
-      const img = scene.add.image(DEFAULT_RESOLUTION_X / 2, DEFAULT_RESOLUTION_Y / 2, imageId);
-      img.setName(imageId);
-      img.setDisplaySize(DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y);
-      img.setDepth(1);
+      const mask = scene.add.image(DEFAULT_RESOLUTION_X / 2, DEFAULT_RESOLUTION_Y / 2, imageId)
+        .setName(imageId)
+        .setDisplaySize(DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y)
+        .setVisible(false)
+        .createBitmapMask();
+      scene.add.shader('fogofwar', DEFAULT_RESOLUTION_X / 2, DEFAULT_RESOLUTION_Y / 2, DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y)
+        .setMask(mask)
+        .setDepth(1);
     });
   }
 

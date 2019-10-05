@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-import { EncounterEvents } from '../../../hbt-common/socketIoEvents';
+import { EncounterEvents, ScreenEvents } from '../../../hbt-common/socketIoEvents';
 
 import socket from '../socket';
 import { Button } from '../styled_components/Button';
@@ -60,6 +60,13 @@ export default class EncounterLoader extends Component<Object, State> {
     socket.on(EncounterEvents.READY, () => {
       this.setState({ selectedEncounterReady: true });
     });
+    socket.on(ScreenEvents.STARTED, () => {
+      this.setState({
+        selectedCampaign: undefined,
+        selectedEncounter: undefined,
+        selectedEncounterReady: false,
+      });
+    });
     socket.emit(EncounterEvents.LIST_LOAD);
   }
 
@@ -78,12 +85,7 @@ export default class EncounterLoader extends Component<Object, State> {
   }
   
   reloadScreen() {
-    socket.emit(EncounterEvents.RELOAD);
-    this.setState({
-      selectedCampaign: undefined,
-      selectedEncounter: undefined,
-      selectedEncounterReady: false,
-    });
+    socket.emit(ScreenEvents.RELOAD);
   }
 
   render() {

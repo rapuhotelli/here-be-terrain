@@ -1,6 +1,6 @@
 import SocketIo from 'socket.io';
 
-import { EncounterEvents } from '../../../hbt-common/socketIoEvents';
+import { EncounterEvents, ScreenEvents } from '../../../hbt-common/socketIoEvents';
 
 import { DMSockets, ScreenSockets } from '../sockets';
 import { getAllEncounters, getEncounterData } from '../util';
@@ -32,13 +32,17 @@ export function setUpDMEncounterSocket(socket: SocketIo.Socket) {
     ScreenSockets.emit(EncounterEvents.LAYER_UPDATE, encounterPath(campaign, encounter), layerId, pngDataUrl);
   });
 
-  socket.on(EncounterEvents.RELOAD, () => {
-    ScreenSockets.emit(EncounterEvents.RELOAD);
+  socket.on(ScreenEvents.RELOAD, () => {
+    ScreenSockets.emit(ScreenEvents.RELOAD);
   });
 }
 
 export function setUpScreenEncounterSocket(socket: SocketIo.Socket) {
   socket.on(EncounterEvents.READY, () => {
     DMSockets.emit(EncounterEvents.READY);
+  });
+
+  socket.on(ScreenEvents.STARTED, () => {
+    DMSockets.emit(ScreenEvents.STARTED);
   });
 }

@@ -1,13 +1,13 @@
 import * as SocketIo from 'socket.io-client';
-import { EncounterEvents } from '../../hbt-common/socketIoEvents';
+import { ScreenEvents } from '../../hbt-common/socketIoEvents';
 
 const socket = SocketIo.connect('/screen');
 
-socket.on('welcome', (data: string) => {
-  console.log(data);
+socket.on('welcome', () => {
+  socket.emit(ScreenEvents.STARTED);
 });
 
-socket.on(EncounterEvents.RELOAD, () => {
+socket.on(ScreenEvents.RELOAD, () => {
   window.location.href = `/`;
 });
 
