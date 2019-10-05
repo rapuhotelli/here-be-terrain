@@ -12,6 +12,7 @@
     "lint": "tslint -p \".\" -t stylish"
   },
   "dependencies": {
+    "@juggle/resize-observer": "^2.3.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-router-dom": "^5.1.1",

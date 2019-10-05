@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Button } from '../styled_components/Button';
 import { Form } from '../styled_components/Form';
-import { Section, SectionTitle } from '../styled_components/Section';
+import { Section, SectionTitle } from '../styled_components/Page';
 import { TextInput } from '../styled_components/TextInput';
 
 const FlexContainer = styled.div`

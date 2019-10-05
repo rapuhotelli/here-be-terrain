@@ -1,11 +1,12 @@
+import ResizeObserver from '@juggle/resize-observer';
 import React, { Component, MouseEvent, TouchEvent } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { EncounterEvents } from '../../../hbt-common/socketIoEvents';
 
 import socket from '../socket';
 import { Button } from '../styled_components/Button';
-import { SectionTitle } from '../styled_components/Section';
+import { SectionTitle } from '../styled_components/Page';
 
 import { getLayerData, hasLayerData, saveLayerData } from './EncounterLayerStorage';
 
@@ -19,27 +20,41 @@ const DrawMode = {
   ERASE: 'erase',
 };
 
-const Canvas = styled.canvas`
+const LayerContainer = styled.div`
   position: absolute;
-  top: 0;
-  left: 0;
   height: 100%;
   width: 100%;
-  z-index: 2;
-  touch-action: none;
+  top: 0;
+  left: 0;
+  z-index: 1;
 
+  ${(props: { zIndex?: number }) => props.zIndex && css`
+    z-index: ${props.zIndex};
+  `}
+`;
+
+const Canvas = styled.canvas`
+  touch-action: none;
   opacity: 0.6;
+  height: 100%;
+  width: 100%;
+
+  ${(props: { zIndex?: number }) => props.zIndex && css`
+    opacity: ${0.4 + 0.1 * props.zIndex};
+  `}
 `;
 
 const LayerActions = styled.div`
   position: absolute;
-  top: 100%;
-  width: 100%;
-  z-index: 2;
+  top: 0;
+  left: 100%;
+  width: 25%;
+  background-color: white;
 `;
 
 const ActionButton = styled(Button)`
   margin: 4px;
+  display: block;
 `;
 
 const ActionsTitle = styled(SectionTitle)`
@@ -53,6 +68,7 @@ interface Props {
   encounter: string;
   layerId: string;
   color: string;
+  zIndex: number;
 }
 interface State {
   drawMode: string;
@@ -62,6 +78,7 @@ interface State {
 }
 export default class EncounterLayer extends Component<Props, State> {
   canvasRef: React.RefObject<HTMLCanvasElement>;
+  resizeObserver: ResizeObserver;
   constructor(props: Props) {
     super(props);
 
@@ -81,11 +98,35 @@ export default class EncounterLayer extends Component<Props, State> {
     this.selectDrawMode = this.selectDrawMode.bind(this);
     this.draw = this.draw.bind(this);
     this.sendToScreen = this.sendToScreen.bind(this);
+    this.setUpDrawScaling = this.setUpDrawScaling.bind(this);
+
+    this.resizeObserver = new ResizeObserver(this.setUpDrawScaling);
   }
 
   componentDidMount() {
+    this.emptyLayer();
     this.loadStoredData(true);
+    
+    const canvas = this.canvasRef.current;
+    if (!canvas) return;
+    
+    this.resizeObserver.unobserve(canvas);
+    this.resizeObserver.observe(canvas);
+  }
 
+  componentWillUnmount() {
+    const canvas = this.canvasRef.current;
+    if (!canvas) return;
+    this.resizeObserver.unobserve(canvas);
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.layerId !== this.props.layerId) {
+      this.componentDidMount();
+    }
+  }
+
+  setUpDrawScaling() {
     const canvas = this.canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -231,12 +272,12 @@ export default class EncounterLayer extends Component<Props, State> {
   }
 
   render() {
-    const { layerId } = this.props;
+    const { layerId, zIndex } = this.props;
     const { hasStoredData, layerData, drawMode } = this.state;
     return (
-      <div>
+      <LayerContainer zIndex={zIndex}>
         <Canvas ref={this.canvasRef} width={canvasRes.width} height={canvasRes.height}
-          onMouseMove={this.draw} onTouchMove={this.draw}></Canvas>
+          onMouseMove={this.draw} onTouchMove={this.draw} zIndex={zIndex}></Canvas>
         <LayerActions>
           <ActionsTitle>{layerId} layer actions:</ActionsTitle>
           <ActionButton active={drawMode === DrawMode.DRAW} onClick={() => this.selectDrawMode(DrawMode.DRAW)}>Draw</ActionButton>
@@ -256,7 +297,7 @@ export default class EncounterLayer extends Component<Props, State> {
             : undefined
           }
         </LayerActions>
-      </div>
+      </LayerContainer>
     );
   }
 }

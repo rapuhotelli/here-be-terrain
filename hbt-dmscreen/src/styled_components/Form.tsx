@@ -16,3 +16,7 @@ export const SubmitButton = styled(Button)`
   padding-left: 24px;
   padding-right: 24px;
 `;
+
+export const Select = styled.select`
+  padding: 8px 4px;
+`;

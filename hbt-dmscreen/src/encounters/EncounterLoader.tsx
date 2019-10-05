@@ -1,16 +1,25 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
+import React, { Component, useState } from 'react';
+import styled, { css } from 'styled-components';
 
 import { EncounterEvents, ScreenEvents } from '../../../hbt-common/socketIoEvents';
 
 import socket from '../socket';
 import { Button } from '../styled_components/Button';
-import { Section, SectionTitle } from '../styled_components/Section';
+import { Page, PageTitle, Section, SectionTitle } from '../styled_components/Page';
 import SelectedEncounter from './SelectedEncounter';
 
-const ReloadScreenButton = styled(Button)`
-  display: block;
-  margin-bottom: 8px;
+const PageHeader = styled.div`
+  position: relative;
+  height: 36px;
+`;
+
+const ActionBar = styled.div`
+  position: absolute;
+  left: 0;
+`;
+
+const OpenEncountersButton = styled(Button)`
+  margin-right: 4px;
 `;
 
 const EncounterButton = styled(Button)`
@@ -20,15 +29,24 @@ const EncounterButton = styled(Button)`
 
 const FlexContainer = styled.div`
   display: flex;
+  padding: 8px 0;
 `;
 
 const EncounterList = styled.div`
   flex-shrink: 0;
-  width: 30%;
+  width: 20%;
+  transition: .3s;
+
+  ${(props: { hide?: boolean }) => props.hide && css`
+    width: 0;
+  `}
 `;
 
 const EncounterSection = styled.div`
   flex: 1;
+  padding-left: 8px;
+  background-color: white;
+  border-left: 1px solid #ddd;
 `;
 
 type EncounterKey = string;
@@ -40,6 +58,7 @@ interface State {
   selectedCampaign?: string;
   selectedEncounter?: EncounterKey;
   selectedEncounterReady?: boolean;
+  hideEncounters: boolean;
 }
 
 export default class EncounterLoader extends Component<Object, State> {
@@ -48,23 +67,29 @@ export default class EncounterLoader extends Component<Object, State> {
 
     this.state = {
       campaigns: {},
+      hideEncounters: false,
     };
 
     this.loadEncounter = this.loadEncounter.bind(this);
     this.reloadScreen = this.reloadScreen.bind(this);
+    this.toggleEncounters = this.toggleEncounters.bind(this);
   }
   componentDidMount() {
     socket.on(EncounterEvents.LIST_UPDATE, (data: Campaigns) => {
       this.setState({ campaigns: data });
     });
     socket.on(EncounterEvents.READY, () => {
-      this.setState({ selectedEncounterReady: true });
+      this.setState({
+        selectedEncounterReady: true,
+        hideEncounters: true,
+      });
     });
     socket.on(ScreenEvents.STARTED, () => {
       this.setState({
         selectedCampaign: undefined,
         selectedEncounter: undefined,
         selectedEncounterReady: false,
+        hideEncounters: false,
       });
     });
     socket.emit(EncounterEvents.LIST_LOAD);
@@ -73,6 +98,7 @@ export default class EncounterLoader extends Component<Object, State> {
   componentWillUnmount() {
     socket.off(EncounterEvents.LIST_UPDATE);
     socket.off(EncounterEvents.READY);
+    socket.off(ScreenEvents.STARTED);
   }
 
   loadEncounter(campaign: string, encounter: string) {
@@ -88,19 +114,30 @@ export default class EncounterLoader extends Component<Object, State> {
     socket.emit(ScreenEvents.RELOAD);
   }
 
+  toggleEncounters() {
+    this.setState(({ hideEncounters }) => ({ hideEncounters: !hideEncounters }));
+  }
+
   render() {
     const {
       campaigns,
       selectedCampaign,
       selectedEncounter,
       selectedEncounterReady,
+      hideEncounters,
     } = this.state;
+
     return (
-      <Section>
-        <SectionTitle main>Encounter Loader</SectionTitle>
+      <Page>
+        <PageHeader>
+          <ActionBar>
+            <OpenEncountersButton onClick={this.toggleEncounters}>{hideEncounters ? 'Show Encounter List' : 'Hide Encounter List'}</OpenEncountersButton>
+            <Button onClick={this.reloadScreen}>Reload Screen</Button>
+          </ActionBar>
+          <PageTitle>Encounter Loader</PageTitle>
+        </PageHeader>
         <FlexContainer>
-          <EncounterList>
-            <ReloadScreenButton onClick={this.reloadScreen}>Reload Screen</ReloadScreenButton>
+          <EncounterList hide={hideEncounters}>
             {Object.keys(campaigns).map((campaignName) => {
               const encounters = campaigns[campaignName];
               return (
@@ -123,8 +160,7 @@ export default class EncounterLoader extends Component<Object, State> {
             }
           </EncounterSection>
         </FlexContainer>
-
-      </Section>
+      </Page>
     );
   }
 }

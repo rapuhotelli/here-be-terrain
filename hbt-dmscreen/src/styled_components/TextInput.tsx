@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import styled, { css } from 'styled-components';
 
-const InputContainer = styled.label`
+export const InputContainer = styled.label`
   display: flex;
   font-weight: 500;
 `;
-const LabelText = styled.div`
+export const LabelText = styled.div`
   min-width: 10em;
   flex-shrink: 0;
 `;

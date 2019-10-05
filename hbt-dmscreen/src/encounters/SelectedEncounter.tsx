@@ -6,17 +6,26 @@ import { EncounterEvents } from '../../../hbt-common/socketIoEvents';
 
 import socket from '../socket';
 import { Button } from '../styled_components/Button';
-import { Section, SectionTitle } from '../styled_components/Section';
+import { Section, SectionTitle } from '../styled_components/Page';
+import { LabeledSelect } from '../styled_components/SelectInput';
 import EncounterLayer from './EncounterLayer';
 
 const ActionsContainer = styled.div`
+  position: relative;
   margin-bottom: 12px;
+`;
+
+const LayerSelection = styled.div`
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  right: 0;
 `;
 
 const CanvasContainer = styled.div`
   position: relative;
-  width: 100%;
-  padding-top: ${9/16 * 100}%;
+  width: 80%;
+  padding-top: ${0.8 * 9 / 16 * 100}%;
 `;
 
 const BackImg = styled.img`
@@ -28,19 +37,26 @@ const BackImg = styled.img`
   z-index: 1;
 `;
 
+const ShowToScreenButton = styled(Button)`
+  margin-right: 4px;
+`;
+
 interface Props {
   campaign: string;
   encounter: string;
 }
 interface State {
   encounterData?: IEncounter;
+  selectedLayerId: string;
 }
 
 export default class SelectedEncounter extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      selectedLayerId: 'fogofwar',
+    };
 
     this.showSelectedEncounterOnScreen = this.showSelectedEncounterOnScreen.bind(this);
   }
@@ -65,15 +81,22 @@ export default class SelectedEncounter extends Component<Props, State> {
 
   render() {
     const { campaign, encounter } = this.props;
-    const { encounterData } = this.state;
+    const { encounterData, selectedLayerId } = this.state;
     return (
       <Section>
-        <SectionTitle>{encounter}</SectionTitle>
+        <SectionTitle>Selected encounter: {encounter}</SectionTitle>
         <ActionsContainer> 
-          <Button onClick={this.showSelectedEncounterOnScreen}>
-            Show to screen
-          </Button>
-          &nbsp;&lt;-- CLICK THIS TO SHOW THIS ENCOUNTER TO THE SCREEN
+          <ShowToScreenButton onClick={this.showSelectedEncounterOnScreen}>
+            Show encounter to screen
+          </ShowToScreenButton>
+          <LayerSelection>
+            <LabeledSelect value={selectedLayerId} labelText='Edit layer:' onChange={(e: any) => {
+              this.setState({ selectedLayerId: e.target.value });
+            }}>
+              <option value='fogofwar'>Fog of war</option>
+              <option value='fire'>Fire</option>
+            </LabeledSelect>
+          </LayerSelection>
         </ActionsContainer>
         <CanvasContainer>
           {encounterData
@@ -85,7 +108,8 @@ export default class SelectedEncounter extends Component<Props, State> {
             )
             : (<div>No pics</div>)
           }
-          <EncounterLayer campaign={campaign} encounter={encounter} layerId='fog-of-war' color='black'></EncounterLayer>
+          <EncounterLayer campaign={campaign} encounter={encounter} zIndex={selectedLayerId === 'fogofwar' ? 2 : 1} layerId='fogofwar' color='black'></EncounterLayer>
+          <EncounterLayer campaign={campaign} encounter={encounter} zIndex={selectedLayerId === 'fire' ? 2 : 1} layerId='fire' color='#ef4209'></EncounterLayer>
         </CanvasContainer>
       </Section>
     );

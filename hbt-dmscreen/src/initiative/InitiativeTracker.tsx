@@ -5,13 +5,13 @@ import { InitiativeEvents } from '../../../hbt-common/socketIoEvents';
 import InitiativeTracker, { CreatureInitiative } from '../../../hbt-server/src/initiative/InitiativeTracker';
 
 import socket from '../socket';
-import { Section, SectionTitle } from '../styled_components/Section';
+import { Page, PageTitle } from '../styled_components/Page';
 import AddCreatureInitiative from './AddCreatureInitiative';
 import CurrentTurn from './CurrentTurn';
 import InitiativePosition from './InitiativePosition';
 import InitiativesList from './InitiativesList';
 
-const TrackerSection = styled(Section)`
+const TrackerSection = styled(Page)`
   width: 100%;
   max-width: 400px;
 `;
@@ -88,7 +88,7 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
 
     return (
       <TrackerSection>
-        <SectionTitle main>Initiative tracker</SectionTitle>
+        <PageTitle>Initiative tracker</PageTitle>
         <InitiativePosition
           ref={this.positionFormRef}
           onNext={this.next}

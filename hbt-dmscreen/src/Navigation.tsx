@@ -1,25 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { baseButtonStyles } from './styled_components/Button';
+import styled, { css } from 'styled-components';
+import { baseButtonStyles, Button } from './styled_components/Button';
+
+const NavContainer = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 8px 8px 2px;
+  text-align: right;
+  background: white;
+  border-bottom: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  z-index: 10;
+`;
+
+const MenuButton = styled(Button)`
+  margin-bottom: 6px;
+`;
 
 const NavBar = styled.div`
+  display: none;  
   text-align: center;
-  padding: 4px 0;
-  border-bottom: 1px solid #ddd;
+
+  ${(props: { show?: boolean }) => props.show && css`
+    display: block;
+  `}
 `;
 
 const NavButton = styled(Link)`
-  margin: 0 2px;
-  display: inline-block;
+  margin-bottom: 6px;
+  display: block;
   ${baseButtonStyles}
 `;
 
 export default function Navigation() {
+  const [openMenu, setOpenMenu] = useState(false);
   return (
-    <NavBar>
-      <NavButton to='/'>Encounters</NavButton>
-      <NavButton to='/initiative'>Initiative</NavButton>
-    </NavBar>
+    <NavContainer>
+      <MenuButton onClick={() => setOpenMenu(!openMenu)}>Nav</MenuButton>
+      <NavBar show={openMenu}>
+        <NavButton onClick={() => setOpenMenu(!openMenu)} to='/'>Encounters</NavButton>
+        <NavButton onClick={() => setOpenMenu(!openMenu)} to='/initiative'>Initiative</NavButton>
+      </NavBar>
+    </NavContainer>
   );
 }

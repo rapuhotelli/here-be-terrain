@@ -150,14 +150,21 @@ export default class EncounterManager extends Phaser.Scene {
       this.textures.addBase64(imageId, pngDataUrl);
     }
     this.textures.once('addtexture', () => {
-      const mask = scene.add.image(DEFAULT_RESOLUTION_X / 2, DEFAULT_RESOLUTION_Y / 2, imageId)
-        .setName(imageId)
-        .setDisplaySize(DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y)
-        .setVisible(false)
-        .createBitmapMask();
-      scene.add.shader('fogofwar', DEFAULT_RESOLUTION_X / 2, DEFAULT_RESOLUTION_Y / 2, DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y)
-        .setMask(mask)
-        .setDepth(1);
+      if (AvailableShaders.includes(layerId)) {
+        const mask = scene.add.image(DEFAULT_RESOLUTION_X / 2, DEFAULT_RESOLUTION_Y / 2, imageId)
+          .setName(imageId)
+          .setDisplaySize(DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y)
+          .setVisible(false)
+          .createBitmapMask();
+        scene.add.shader(layerId, DEFAULT_RESOLUTION_X / 2, DEFAULT_RESOLUTION_Y / 2, DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y)
+          .setMask(mask)
+          .setDepth(1);
+      } else {
+        const img = scene.add.image(DEFAULT_RESOLUTION_X / 2, DEFAULT_RESOLUTION_Y / 2, imageId);
+        img.setName(imageId);
+        img.setDisplaySize(DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y);
+        img.setDepth(1);
+      }
     });
   }
 
