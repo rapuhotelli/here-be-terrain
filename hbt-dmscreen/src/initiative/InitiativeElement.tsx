@@ -6,7 +6,8 @@ import { CreatureInitiative } from '../../../hbt-server/src/initiative/Initiativ
 import { ListElement } from '../styled_components/ListElement';
 
 const DeleteButton = styled.button`
-  font-size: 16px;
+  font-size: 20px;
+  line-height: 1em;
   position: absolute;
   right: 0;
   top: 0;

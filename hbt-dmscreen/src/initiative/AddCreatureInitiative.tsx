@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
 import { CreatureInitiative } from '../../../hbt-server/src/initiative/InitiativeTracker';
+
+import { CheckboxInput } from '../styled_components/Checkbox';
 import { Form, FormTitle, SubmitButton } from '../styled_components/Form';
 import { Keypad, KeypadButton } from '../styled_components/Keypad';
 import { TextInput } from '../styled_components/TextInput';
@@ -22,12 +24,14 @@ const Container = styled.div`
 
 interface Props {
   show: boolean;
-  onSubmit: (creatureInitiative: CreatureInitiative) => void;
+  addMore?: boolean;
+  onSubmit: (creatureInitiative: CreatureInitiative, addMore: boolean) => void;
   onCancel: () => void;
 }
 interface State {
   creature: string;
   initiative: string;
+  addMore: boolean;
 }
 
 export default class AddCreatureInitiative extends Component<Props, State> {
@@ -37,6 +41,7 @@ export default class AddCreatureInitiative extends Component<Props, State> {
     this.state = {
       creature: '',
       initiative: '',
+      addMore: !!props.addMore,
     };
 
     this.handleCreatureChange = this.handleCreatureChange.bind(this);
@@ -56,16 +61,16 @@ export default class AddCreatureInitiative extends Component<Props, State> {
   handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const { creature, initiative } = this.state;
+    const { creature, initiative, addMore } = this.state;
 
     this.props.onSubmit({
       creature,
       initiative: parseInt(initiative, 10),
-    });
+    }, addMore);
   }
 
-  updateValues({creature, initiative}: CreatureInitiative) {
-    this.setState({ creature, initiative: `${initiative}` });
+  updateValues({ creature, initiative }: CreatureInitiative, addMore: boolean) {
+    this.setState({ creature, initiative: `${initiative}`, addMore });
   }
 
   render() {
@@ -87,6 +92,10 @@ export default class AddCreatureInitiative extends Component<Props, State> {
           <Keypad>
             {keyPadButtons}
           </Keypad>
+          <CheckboxInput
+            labelText='Add one more of the same'
+            defaultChecked={this.state.addMore}
+            onChange={() => this.setState({ addMore: !this.state.addMore })} />
           <SubmitButton type='reset' onClick={this.props.onCancel}>Skip</SubmitButton>
         </Form>
       </Container>

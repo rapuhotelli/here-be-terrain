@@ -10,7 +10,6 @@ import { Button } from '../styled_components/Button';
 import { Keypad, KeypadButton } from '../styled_components/Keypad';
 import { Page, PageTitle, Section, SectionTitle } from '../styled_components/Page';
 import AddCreatureInitiative from './AddCreatureInitiative';
-import CurrentTurn from './CurrentTurn';
 import InitiativePosition from './InitiativePosition';
 import InitiativesList from './InitiativesList';
 
@@ -38,8 +37,6 @@ const TrackerSection = styled(Section)`
 const ClearInitiativeButton = styled(Button)`
   margin-right: 8px;
 `;
-
-let currentEnemyId = 1;
 
 interface Props { }
 interface State {
@@ -76,7 +73,6 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
     this.showAddCreatureForm = this.showAddCreatureForm.bind(this);
     this.processCreaturesToAddList = this.processCreaturesToAddList.bind(this);
     this.hideAddCreatureForm = this.hideAddCreatureForm.bind(this);
-    this.addEnemyGroup = this.addEnemyGroup.bind(this);
 
     this.positionFormRef = React.createRef();
     this.initiativeFormRef = React.createRef();
@@ -106,9 +102,23 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
     });
   }
 
-  addCreatureInitiative(initiative: CreatureInitiative) {
+  addCreatureInitiative(initiative: CreatureInitiative, addMore: boolean = false) {
     socket.emit(InitiativeEvents.ADD_CREATURE, initiative);
-    this.processCreaturesToAddList();
+    if (addMore) {
+      // simple regexs to get the creature number
+      // and increment it for the next one
+      const execResult = /(\d*)\s*$/.exec(initiative.creature);
+      if (execResult) {
+        const [prevCreatureNumber] = execResult;
+        const prevCreatureName = initiative.creature.replace(/\s+\d*\s*$/, '');
+        this.showAddCreatureForm({
+          creature: `${prevCreatureName} ${(+(prevCreatureNumber || '1'))+1}`,
+          initiative: 1,
+        }, true);
+      }
+    } else {
+      this.processCreaturesToAddList();
+    }
   }
 
   setInitiativePosition(newPosition: number) {
@@ -131,20 +141,13 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
     this.addCreatures(playerGroup.players);
   }
 
-  addEnemyGroup(amount: number) {
-    const enemies = [...Array(amount).keys()].map(i => `Enemy ${i + currentEnemyId}`);
-    currentEnemyId += amount;
-    this.addCreatures(enemies);
-  }
-
-  selectInitiative(initiative: CreatureInitiative) {
+  selectInitiative(initiative: CreatureInitiative, addMore: boolean) {
     if (this.initiativeFormRef.current) {
-      this.initiativeFormRef.current.updateValues(initiative);
+      this.initiativeFormRef.current.updateValues(initiative, addMore);
     }
   }
 
   resetTracker() {
-    currentEnemyId = 1;
     socket.emit(InitiativeEvents.RESET);
   }
 
@@ -167,9 +170,9 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
     }
   }
 
-  showAddCreatureForm(initiative: CreatureInitiative) {
+  showAddCreatureForm(initiative: CreatureInitiative, addMore: boolean = false) {
     this.setState({ showAddCreatureForm: true });
-    this.selectInitiative(initiative);
+    this.selectInitiative(initiative, addMore);
   }
 
   hideAddCreatureForm() {
@@ -181,7 +184,18 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
       return <div>Loading..</div>;
     }
 
-    const [currentCreature, ...otherCreatures] = this.state.tracker.initiatives;
+    const [currentCreature] = this.state.tracker.initiatives;
+    // Sort descending; Do this after getting currentCreature
+    // because .sort() does it in-place too.
+    const creatures = this.state.tracker.initiatives.sort((a, b) => {
+      if (a.initiative < b.initiative) {
+        return 1;
+      }
+      if (a.initiative > b.initiative) {
+        return -1;
+      }
+      return 0;
+    });
     const { playerGroups, showAddCreatureForm } = this.state;
 
     return (
@@ -195,8 +209,11 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
               onPrevious={this.previous}
               onSubmit={this.setInitiativePosition}
               position={this.state.tracker.initiativePosition} />
-            <CurrentTurn initiative={currentCreature} onDelete={this.delete} onEdit={this.showAddCreatureForm} />
-            <InitiativesList initiatives={otherCreatures} onDelete={this.delete} onEdit={this.showAddCreatureForm} />
+            <InitiativesList
+              initiatives={creatures}
+              currentCreature={currentCreature}
+              onDelete={this.delete}
+              onEdit={this.showAddCreatureForm} />
           </TrackerSection>
           <ActionSection>
             <StaticSection>
@@ -217,14 +234,6 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
                 ))
                 : undefined
               }
-            </Section>
-            <Section>
-              <SectionTitle>Add enemies:</SectionTitle>
-              <Keypad>
-                {[...Array(5).keys()].map(i => (
-                  <KeypadButton key={i} onClick={() => this.addEnemyGroup(i+1)}>{i+1}</KeypadButton>
-                ))}
-              </Keypad>
             </Section>
           </ActionSection>
         </FlexContainer>
