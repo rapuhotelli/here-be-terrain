@@ -81,7 +81,7 @@ export default class EncounterLoader extends Component<Object, State> {
     socket.on(EncounterEvents.READY, () => {
       this.setState({
         selectedEncounterReady: true,
-        hideEncounters: true,
+        // hideEncounters: true,
       });
     });
     socket.on(ScreenEvents.STARTED, () => {

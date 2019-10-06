@@ -13,6 +13,13 @@ const AvailableShaders = [
   'water',
 ];
 
+export const encounterResourceKey = (encounterData: IEncounter) => {
+  const encounterKey = encounterData.key;
+  return function resourceKey(resourceKey: string) {
+    return `${encounterKey}-${resourceKey}`;
+  };
+};
+
 export default class EncounterManager extends Phaser.Scene {
   private currentSceneId: string;
 
@@ -56,13 +63,15 @@ export default class EncounterManager extends Phaser.Scene {
 
     this.changeToScene(newSceneId);
   }
-
+  
   loadScene(path: string, showWhenReady: boolean = false) {
     const newSceneId = `scene.${path}`;
     const newEncounterId = `encounter.${path}`;
     const sceneManager: Phaser.Scenes.SceneManager = this.game.scene;
     let map: Phaser.Scene;
 
+    const encounterResource = encounterResourceKey(this.cache.json.get(newEncounterId));
+    
     if (newSceneId === this.currentSceneId) {
       socket.emit(EncounterEvents.READY);
       return;
@@ -92,25 +101,25 @@ export default class EncounterManager extends Phaser.Scene {
       encounterData.layers.map((layer: IEncounterLayer) => {
         if (['texture', 'shader'].includes(layer.type)) {
           if (layer.type === 'texture') {
-            this.load.image(layer.key, `modules/${layer.texture}`);
+            this.load.image(encounterResource(layer.key), `modules/${layer.texture}`);
             if (layer.shader) {
-              this.load.glsl(layer.shader, `shaders/${layer.shader}`);
+              this.load.glsl(encounterResource(layer.shader), `shaders/${layer.shader}`);
             }
           } else if (layer.type === 'shader') {
-            if (this.cache.shader.has(layer.key)) {
+            if (this.cache.shader.has(encounterResource(layer.key))) {
               if (layer.customUniforms) {
-                const cachedShader = this.cache.shader.get(layer.key);
+                const cachedShader = this.cache.shader.get(encounterResource(layer.key));
                 cachedShader.uniforms = layer.customUniforms;
-                this.cache.shader.add(layer.key, cachedShader);
+                this.cache.shader.add(encounterResource(layer.key), cachedShader);
               }
             } else if(layer.shader) {
-              this.load.glsl(layer.key, `shaders/${layer.shader}`);
+              this.load.glsl(encounterResource(layer.key), `shaders/${layer.shader}`);
               if (layer.customUniforms) {
                 this.load.once('complete', () => {
-                  if (this.cache.shader.has(layer.key)) {
-                    const cachedShader = this.cache.shader.get(layer.key);
+                  if (this.cache.shader.has(encounterResource(layer.key))) {
+                    const cachedShader = this.cache.shader.get(encounterResource(layer.key));
                     cachedShader.uniforms = layer.customUniforms;
-                    this.cache.shader.add(layer.key, cachedShader);
+                    this.cache.shader.add(encounterResource(layer.key), cachedShader);
                   }
                 });
               }

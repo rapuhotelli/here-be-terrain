@@ -1,5 +1,6 @@
 import { IEncounter, IEncounterLayer } from '../../hbt-common/interfaces';
 
+import { encounterResourceKey } from './EncounterManager';
 import { Grid } from './grid';
 import { DEFAULT_CELL_SIZE, DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y } from './params';
 import { createTextureTintPipeline } from './pipelines';
@@ -40,6 +41,8 @@ export default class MapScene extends Phaser.Scene {
 
   create() {
     let { width: screenWidth, height: screenHeight } = this.sys.game.canvas;
+    
+    const encounterResource = encounterResourceKey(this.encounter);
 
     const cellSize = this.encounter.cellSize || DEFAULT_CELL_SIZE;
 
@@ -58,15 +61,15 @@ export default class MapScene extends Phaser.Scene {
       if (layer.type === 'texture') {
         const { position, dimensions } = setLayerDimensions(layer);
         if (layer.shader) {
-          const shader = this.add.shader(layer.shader, position.x, position.y, dimensions.width, dimensions.height);
-          shader.setChannel0(layer.key);
+          const shader = this.add.shader(encounterResource(layer.shader), position.x, position.y, dimensions.width, dimensions.height);
+          shader.setChannel0(encounterResource(layer.key));
         } else {
-          const textureLayer = this.add.image(position.x, position.y, layer.key);
+          const textureLayer = this.add.image(position.x, position.y, encounterResource(layer.key));
           textureLayer.setDisplaySize(dimensions.width, dimensions.height);
         }
       } else if (layer.type === 'shader') {
         const { position, dimensions } = setLayerDimensions(layer);
-        this.add.shader(layer.key, position.x, position.y, dimensions.width, dimensions.height);
+        this.add.shader(encounterResource(layer.key), position.x, position.y, dimensions.width, dimensions.height);
       }
     });
     
