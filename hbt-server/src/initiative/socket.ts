@@ -2,6 +2,7 @@ import SocketIo from 'socket.io';
 
 import { InitiativeEvents } from '../../../hbt-common/socketIoEvents';
 
+import { getPlayerGroups } from '../util';
 import InitiativeTracker, { CreatureInitiative } from './InitiativeTracker';
 
 export function setUpInitiativeSocket(socket: SocketIo.Socket) {
@@ -33,5 +34,14 @@ export function setUpInitiativeSocket(socket: SocketIo.Socket) {
   socket.on(InitiativeEvents.SET_POSITION, (newPosition: number) => {
     tracker.setPosition(newPosition);
     socket.emit(InitiativeEvents.UPDATE, tracker);
+  });
+
+  socket.on(InitiativeEvents.RESET, () => {
+    tracker.reset();
+    socket.emit(InitiativeEvents.UPDATE, tracker);
+  });
+
+  socket.on(InitiativeEvents.GROUPS_GET, async () => {
+    socket.emit(InitiativeEvents.GROUPS_SEND, await getPlayerGroups());
   });
 }

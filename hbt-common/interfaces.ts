@@ -21,3 +21,8 @@ export interface IEncounterLayer {
   dimensions?: {width: number, height: number};
   customUniforms?: { type: string, value: any };
 }
+
+export interface IPlayerGroup {
+  name: string;
+  players: string[];
+}

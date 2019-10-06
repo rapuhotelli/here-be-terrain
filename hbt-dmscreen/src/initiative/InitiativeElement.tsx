@@ -21,16 +21,20 @@ const DeleteButton = styled.button`
 interface Props {
   initiative: CreatureInitiative;
   onDelete: (initiative: CreatureInitiative) => void;
+  onClick: (initiative: CreatureInitiative) => void;
   main?: boolean;
 }
 export default function InitiativeElement(props: Props) {
   if (!props.initiative) {
     return (<ListElement main>No creatures in the initiative.</ListElement>);
   }
-  const { initiative, onDelete, main } = props;
+  const { initiative, onDelete, onClick, main } = props;
   return (
-    <ListElement main={main}>
-      <DeleteButton onClick={() => onDelete(initiative)}>&#x2716;</DeleteButton>
+    <ListElement main={main} onClick={() => onClick(initiative)}>
+      <DeleteButton onClick={(e) => {
+        e.stopPropagation();
+        onDelete(initiative);
+      }}>&#x2716;</DeleteButton>
       {initiative.creature} ( {initiative.initiative} )
     </ListElement>
   );

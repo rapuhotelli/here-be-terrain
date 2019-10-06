@@ -9,6 +9,7 @@ export const ListElement = styled.div`
   text-align: center;
 
   ${(props: { main?: boolean }) => props.main && css`
+    font-size: 18px;
     font-weight: 500;
     border-width: 2px;
     padding: 16px 12px;

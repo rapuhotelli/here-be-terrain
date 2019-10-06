@@ -12,6 +12,11 @@ export default class InitiativeTracker {
     this.initiativePosition = initiativePosition;
   }
 
+  reset() {
+    this.initiatives = [];
+    this.initiativePosition = 0;
+  }
+
   /**
    * Add or change initiative for a creature
    * @param creature 

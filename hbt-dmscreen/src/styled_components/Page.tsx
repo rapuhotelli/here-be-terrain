@@ -13,6 +13,7 @@ export const PageTitle = styled.h1`
 `;
 
 export const Section = styled.div`
+  position: relative;
   margin-bottom: 16px;
 `;
 

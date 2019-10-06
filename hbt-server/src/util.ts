@@ -83,3 +83,16 @@ export const getIp = () => {
   const flat = [].concat(...ifs).filter(f => f.family === 'IPv4' && f.internal === false);
   return flat[0].address;
 };
+
+export const getPlayerGroups = async () => {
+  const playersFolder = path.join(__dirname, '..', '..', '..', 'public', 'players');
+  const groups = await readdir(playersFolder);
+  const groupsData = await Promise.all(groups.map(getPlayerGroup));
+  return groupsData;
+};
+
+async function getPlayerGroup(groupFileName: string) {
+  const groupFile = path.join(__dirname, '..', '..', '..', 'public', 'players', groupFileName);
+  const fileContent = await readFile(groupFile, 'utf8');
+  return JSON.parse(fileContent);
+}
