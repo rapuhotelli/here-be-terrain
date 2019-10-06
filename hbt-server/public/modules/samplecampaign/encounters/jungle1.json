@@ -12,6 +12,7 @@
     {
       "key": "water",
       "type": "shader",
+      "shader": "water.frag",
       "active": true,
       "position": {
         "x": 50,
