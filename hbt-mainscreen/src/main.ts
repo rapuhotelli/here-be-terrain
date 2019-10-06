@@ -1,6 +1,8 @@
 import 'phaser';
 
 import EncounterManager from './EncounterManager';
+import InitiativeUI from './InitiativeUI';
+
 import GameConfig = Phaser.Types.Core.GameConfig;
 import { DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y } from './params';
 
@@ -34,8 +36,8 @@ const game = new Game({
   canvas: webgl2Canvas,
   // @ts-ignore
   context: webgl2Context,
-
-  scene: EncounterManager,
+  
+  scene: [InitiativeUI, EncounterManager],
 
   width: DEFAULT_RESOLUTION_X,
   height: DEFAULT_RESOLUTION_Y,

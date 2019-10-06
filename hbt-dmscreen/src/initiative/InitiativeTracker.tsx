@@ -13,6 +13,11 @@ import AddCreatureInitiative from './AddCreatureInitiative';
 import InitiativePosition from './InitiativePosition';
 import InitiativesList from './InitiativesList';
 
+const emit = function (event: string, ...args: any[]) {
+  socket.emit(event, ...args);
+  console.log('Emitting', event, ...args);
+}
+
 const FlexContainer = styled.div`
   display: flex;
 `;
@@ -80,8 +85,8 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
 
   componentDidMount() {
     this.setUpListeners();
-    socket.emit(InitiativeEvents.INIT);
-    socket.emit(InitiativeEvents.GROUPS_GET);
+    emit(InitiativeEvents.INIT);
+    emit(InitiativeEvents.GROUPS_GET);
   }
 
   componentWillUnmount() {
@@ -103,7 +108,7 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
   }
 
   addCreatureInitiative(initiative: CreatureInitiative, addMore: boolean = false) {
-    socket.emit(InitiativeEvents.ADD_CREATURE, initiative);
+    emit(InitiativeEvents.ADD_CREATURE, initiative);
     if (addMore) {
       // simple regexs to get the creature number
       // and increment it for the next one
@@ -122,19 +127,19 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
   }
 
   setInitiativePosition(newPosition: number) {
-    socket.emit(InitiativeEvents.SET_POSITION, newPosition);
+    emit(InitiativeEvents.SET_POSITION, newPosition);
   }
 
   next() {
-    socket.emit(InitiativeEvents.NEXT);
+    emit(InitiativeEvents.NEXT);
   }
 
   previous() {
-    socket.emit(InitiativeEvents.PREVIOUS);
+    emit(InitiativeEvents.PREVIOUS);
   }
 
   delete(initiative: CreatureInitiative) {
-    socket.emit(InitiativeEvents.DELETE_CREATURE, initiative);
+    emit(InitiativeEvents.DELETE_CREATURE, initiative);
   }
 
   loadPlayerGroup(playerGroup: IPlayerGroup) {
@@ -148,7 +153,7 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
   }
 
   resetTracker() {
-    socket.emit(InitiativeEvents.RESET);
+    emit(InitiativeEvents.RESET);
   }
 
   addCreatures(creatures = ['']) {

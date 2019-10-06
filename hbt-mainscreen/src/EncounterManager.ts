@@ -1,3 +1,4 @@
+import InitiativeUI from './InitiativeUI';
 import MapScene from './map.scene';
 import SplashscreenScene from './SplashscreenScene';
 
@@ -22,12 +23,25 @@ export const encounterResourceKey = (encounterData: IEncounter) => {
 
 export default class EncounterManager extends Phaser.Scene {
   private currentSceneId: string;
+  
+  constructor() {
+    super({
+      key: 'EncounterManager',
+      active: true,
+    });
+  } 
 
   create() {
     // load first scene
     const splashscreenId = 'scene.splashscreen';
+    // const initiativeUIId = 'scene.initiativeUI';
     const splashscreenScene = new SplashscreenScene({ key: splashscreenId });
+    // const initiativeUIScene = new InitiativeUI({ key: initiativeUIId });
+    
     this.game.scene.add(splashscreenId, splashscreenScene, true);
+    
+    // this.game.scene.add(initiativeUIId, initiativeUIScene, true);
+    
     this.currentSceneId = splashscreenId;
 
     // set up loader
