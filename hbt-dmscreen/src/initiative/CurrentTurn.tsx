@@ -6,10 +6,10 @@ import InitiativeElement from './InitiativeElement';
 interface Props {
   initiative: CreatureInitiative;
   onDelete: (initiative: CreatureInitiative) => void;
-  onClick: (initiative: CreatureInitiative) => void;
+  onEdit: (initiative: CreatureInitiative) => void;
 }
 export default function CurrentTurn(props: Props) {
   return (
-    <InitiativeElement main initiative={props.initiative} onDelete={props.onDelete} onClick={props.onClick} />
+    <InitiativeElement main initiative={props.initiative} onDelete={props.onDelete} onEdit={props.onEdit} />
   );
 }

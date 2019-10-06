@@ -18,23 +18,32 @@ const DeleteButton = styled.button`
   border: none;
 `;
 
+const EditButton = styled(DeleteButton)`
+  left: 0;
+  right: auto;
+`;
+
 interface Props {
   initiative: CreatureInitiative;
   onDelete: (initiative: CreatureInitiative) => void;
-  onClick: (initiative: CreatureInitiative) => void;
+  onEdit: (initiative: CreatureInitiative) => void;
   main?: boolean;
 }
 export default function InitiativeElement(props: Props) {
   if (!props.initiative) {
     return (<ListElement main>No creatures in the initiative.</ListElement>);
   }
-  const { initiative, onDelete, onClick, main } = props;
+  const { initiative, onDelete, onEdit, main } = props;
   return (
-    <ListElement main={main} onClick={() => onClick(initiative)}>
+    <ListElement main={main}>
       <DeleteButton onClick={(e) => {
         e.stopPropagation();
         onDelete(initiative);
       }}>&#x2716;</DeleteButton>
+      <EditButton onClick={(e) => {
+        e.stopPropagation();
+        onEdit(initiative);
+      }}>&#10000;</EditButton>
       {initiative.creature} ( {initiative.initiative} )
     </ListElement>
   );

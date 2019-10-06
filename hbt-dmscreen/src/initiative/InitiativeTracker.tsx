@@ -39,7 +39,7 @@ const ClearInitiativeButton = styled(Button)`
   margin-right: 8px;
 `;
 
-let monsterGroupId = 1;
+let currentEnemyId = 1;
 
 interface Props { }
 interface State {
@@ -132,7 +132,8 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
   }
 
   addEnemyGroup(amount: number) {
-    const enemies = [...Array(amount).keys()].map(i => `Enemy ${i + 1}`);
+    const enemies = [...Array(amount).keys()].map(i => `Enemy ${i + currentEnemyId}`);
+    currentEnemyId += amount;
     this.addCreatures(enemies);
   }
 
@@ -143,7 +144,7 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
   }
 
   resetTracker() {
-    monsterGroupId = 1;
+    currentEnemyId = 1;
     socket.emit(InitiativeEvents.RESET);
   }
 
@@ -194,8 +195,8 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
               onPrevious={this.previous}
               onSubmit={this.setInitiativePosition}
               position={this.state.tracker.initiativePosition} />
-            <CurrentTurn initiative={currentCreature} onDelete={this.delete} onClick={this.showAddCreatureForm} />
-            <InitiativesList initiatives={otherCreatures} onDelete={this.delete} onClick={this.showAddCreatureForm} />
+            <CurrentTurn initiative={currentCreature} onDelete={this.delete} onEdit={this.showAddCreatureForm} />
+            <InitiativesList initiatives={otherCreatures} onDelete={this.delete} onEdit={this.showAddCreatureForm} />
           </TrackerSection>
           <ActionSection>
             <StaticSection>
