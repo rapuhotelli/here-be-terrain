@@ -69,8 +69,6 @@ export default class EncounterManager extends Phaser.Scene {
     const newEncounterId = `encounter.${path}`;
     const sceneManager: Phaser.Scenes.SceneManager = this.game.scene;
     let map: Phaser.Scene;
-
-    const encounterResource = encounterResourceKey(this.cache.json.get(newEncounterId));
     
     if (newSceneId === this.currentSceneId) {
       socket.emit(EncounterEvents.READY);
@@ -92,6 +90,8 @@ export default class EncounterManager extends Phaser.Scene {
     this.load.once('filecomplete', () => {
       const encounterData: IEncounter = this.cache.json.get(newEncounterId);
 
+      const encounterResource = encounterResourceKey(encounterData);
+      
       if (encounterData.shaders) {
         encounterData.shaders.map(shader => {
           this.load.text(shader.key, `shaders/${shader.shader}`);
