@@ -39,6 +39,11 @@ void main() {
   // Normalized pixel coordinates (from 0 to 1)
   vec2 uv = (gl_FragCoord.xy-0.5*resolution.xy)/resolution.y;
   uv /= 3.;
+
+  // After a long time the effect breaks, so temp fix by moving time between -120 and 120
+  // Causes a slowdown->stop->reversal so prolly a better fix can be found
+  float time = sin(time / 120.) * 120.;
+
 	float smoke1 = smoke(uv*13. + vec2(-time*0.1, time*0.4));
   float smoke2 = smoke(uv*21. + vec2(time*0.4, -time*0.3));
   vec3 col = vec3(mix(smoke1, smoke2, .5));
