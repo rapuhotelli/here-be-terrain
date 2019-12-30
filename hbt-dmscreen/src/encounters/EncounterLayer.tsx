@@ -50,6 +50,8 @@ const LayerActions = styled.div`
   left: 100%;
   width: 25%;
   background-color: white;
+  display: flex;
+  flex-direction: column;
 `;
 
 const ActionButton = styled(Button)`
