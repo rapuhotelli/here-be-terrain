@@ -68,6 +68,7 @@ interface Props {
   encounter: string;
   layerId: string;
   color: string;
+  selected: boolean;
   zIndex: number;
 }
 interface State {
@@ -272,31 +273,33 @@ export default class EncounterLayer extends Component<Props, State> {
   }
 
   render() {
-    const { layerId, zIndex } = this.props;
+    const { layerId, zIndex, selected } = this.props;
     const { hasStoredData, layerData, drawMode } = this.state;
     return (
       <LayerContainer zIndex={zIndex}>
         <Canvas ref={this.canvasRef} width={canvasRes.width} height={canvasRes.height}
           onMouseMove={this.draw} onTouchMove={this.draw} zIndex={zIndex}></Canvas>
-        <LayerActions>
-          <ActionsTitle>{layerId} layer actions:</ActionsTitle>
-          <ActionButton active={drawMode === DrawMode.DRAW} onClick={() => this.selectDrawMode(DrawMode.DRAW)}>Draw</ActionButton>
-          <ActionButton active={drawMode === DrawMode.ERASE} onClick={() => this.selectDrawMode(DrawMode.ERASE)}>Erase</ActionButton>
-          <ActionButton onClick={this.fillLayer}>Fill layer</ActionButton>
-          <ActionButton onClick={this.emptyLayer}>Empty layer</ActionButton>
-          { layerData
-            ? (<ActionButton onClick={this.storeData}>Store Data</ActionButton>)
-            : undefined
-          }
-          { hasStoredData
-            ? (<ActionButton onClick={() => this.loadStoredData()}>Load Stored Data</ActionButton>)
-            : undefined
-          }
-          { layerData
-            ? (<ActionButton onClick={this.sendToScreen}>Send Layer to Screen</ActionButton>)
-            : undefined
-          }
-        </LayerActions>
+        { selected &&
+          <LayerActions>
+            <ActionsTitle>{layerId} layer actions:</ActionsTitle>
+            <ActionButton active={drawMode === DrawMode.DRAW} onClick={() => this.selectDrawMode(DrawMode.DRAW)}>Draw</ActionButton>
+            <ActionButton active={drawMode === DrawMode.ERASE} onClick={() => this.selectDrawMode(DrawMode.ERASE)}>Erase</ActionButton>
+            <ActionButton onClick={this.fillLayer}>Fill layer</ActionButton>
+            <ActionButton onClick={this.emptyLayer}>Empty layer</ActionButton>
+            { layerData
+              ? (<ActionButton onClick={this.storeData}>Store Data</ActionButton>)
+              : undefined
+            }
+            { hasStoredData
+              ? (<ActionButton onClick={() => this.loadStoredData()}>Load Stored Data</ActionButton>)
+              : undefined
+            }
+            { layerData
+              ? (<ActionButton onClick={this.sendToScreen}>Send Layer to Screen</ActionButton>)
+              : undefined
+            }
+          </LayerActions>
+        }
       </LayerContainer>
     );
   }

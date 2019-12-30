@@ -108,8 +108,8 @@ export default class SelectedEncounter extends Component<Props, State> {
             )
             : (<div>No pics</div>)
           }
-          <EncounterLayer campaign={campaign} encounter={encounter} zIndex={selectedLayerId === 'fogofwar' ? 2 : 1} layerId='fogofwar' color='black'></EncounterLayer>
-          <EncounterLayer campaign={campaign} encounter={encounter} zIndex={selectedLayerId === 'fire' ? 2 : 1} layerId='fire' color='#ef4209'></EncounterLayer>
+          <EncounterLayer campaign={campaign} encounter={encounter} selected={selectedLayerId === 'fogofwar'} zIndex={selectedLayerId === 'fogofwar' ? 2 : 1} layerId='fogofwar' color='black'></EncounterLayer>
+          <EncounterLayer campaign={campaign} encounter={encounter} selected={selectedLayerId === 'fire'} zIndex={selectedLayerId === 'fire' ? 2 : 1} layerId='fire' color='#ef4209'></EncounterLayer>
         </CanvasContainer>
       </Section>
     );
