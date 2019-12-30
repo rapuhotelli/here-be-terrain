@@ -151,8 +151,12 @@ export default class EncounterManager extends Phaser.Scene {
     const imageId = `${sceneId}/${layerId}`;
     const scene = sceneManager.getScene(sceneId);
     if (this.textures.exists(imageId)) {
+      const shader = scene.children.getByName(`${imageId}/shader`);
+      if (shader) scene.children.remove(shader);
+
       const child = scene.children.getByName(imageId);
       if (child) scene.children.remove(child);
+
       this.textures.remove(imageId);
       this.textures.addBase64(imageId, pngDataUrl);
     } else {
@@ -166,6 +170,7 @@ export default class EncounterManager extends Phaser.Scene {
           .setVisible(false)
           .createBitmapMask();
         scene.add.shader(layerId, DEFAULT_RESOLUTION_X / 2, DEFAULT_RESOLUTION_Y / 2, DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y)
+          .setName(`${imageId}/shader`)
           .setMask(mask)
           .setDepth(1);
       } else {
