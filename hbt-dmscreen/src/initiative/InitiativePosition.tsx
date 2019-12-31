@@ -37,7 +37,6 @@ export default class InitiativePosition extends Component<Props, State> {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.updateValue = this.updateValue.bind(this);
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -53,10 +52,6 @@ export default class InitiativePosition extends Component<Props, State> {
   handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     this.props.onSubmit(parseInt(this.state.position, 10));
-  }
-
-  updateValue(position: number) {
-    this.setState({ position: `${position}` });
   }
 
   render() {
