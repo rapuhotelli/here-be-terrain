@@ -47,7 +47,6 @@ interface State {
 }
 
 export default class InitiativeTrackerComponent extends Component<Props, State> {
-  private positionFormRef: React.RefObject<InitiativePosition>;
   private initiativeFormRef: React.RefObject<AddCreatureInitiative>;
 
   constructor(props: Props) {
@@ -74,7 +73,6 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
     this.processCreaturesToAddList = this.processCreaturesToAddList.bind(this);
     this.hideAddCreatureForm = this.hideAddCreatureForm.bind(this);
 
-    this.positionFormRef = React.createRef();
     this.initiativeFormRef = React.createRef();
   }
 
@@ -92,9 +90,6 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
   setUpListeners() {
     socket.on(InitiativeEvents.UPDATE, (tracker: InitiativeTracker) => {
       this.setState({ tracker });
-      if (this.positionFormRef.current) {
-        this.positionFormRef.current.updateValue(tracker.initiativePosition);
-      }
     });
 
     socket.on(InitiativeEvents.GROUPS_SEND, (playerGroups: IPlayerGroup[]) => {
@@ -204,7 +199,6 @@ export default class InitiativeTrackerComponent extends Component<Props, State> 
         <FlexContainer>
           <TrackerSection>
             <InitiativePosition
-              ref={this.positionFormRef}
               onNext={this.next}
               onPrevious={this.previous}
               onSubmit={this.setInitiativePosition}

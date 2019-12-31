@@ -40,6 +40,12 @@ export default class InitiativePosition extends Component<Props, State> {
     this.updateValue = this.updateValue.bind(this);
   }
 
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.position !== this.props.position) {
+      this.setState({ position: '' + this.props.position });
+    }
+  }
+
   handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     this.setState({ position: event.target.value });
   }
