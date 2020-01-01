@@ -36,6 +36,7 @@ const EncounterList = styled.div`
   flex-shrink: 0;
   width: 20%;
   transition: .3s;
+  overflow: hidden;
 
   ${(props: { hide?: boolean }) => props.hide && css`
     width: 0;
