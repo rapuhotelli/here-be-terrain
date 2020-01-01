@@ -65,11 +65,22 @@ const ActionsTitle = styled(SectionTitle)`
   margin-left: 4px;
 `;
 
+enum Brush {
+  Rectangle,
+  Circle,
+};
+
+const brushes: {[key: string]: Brush} = {
+  rectangle: Brush.Rectangle,
+  circle: Brush.Circle,
+};
+
 interface Props {
   campaign: string;
   encounter: string;
   layerId: string;
   color: string;
+  alphaColor: string;
   selected: boolean;
   zIndex: number;
 }
@@ -78,6 +89,8 @@ interface State {
   layerData?: string | null;
   hasStoredData: boolean;
   posRatio: number[];
+  brush: Brush;
+  brushRadius: string;
 }
 export default class EncounterLayer extends Component<Props, State> {
   canvasRef: React.RefObject<HTMLCanvasElement>;
@@ -89,6 +102,8 @@ export default class EncounterLayer extends Component<Props, State> {
       drawMode: DrawMode.DRAW,
       hasStoredData: false,
       posRatio: [1, 1],
+      brush: Brush.Rectangle,
+      brushRadius: '4',
     };
 
     this.canvasRef = React.createRef();
@@ -99,6 +114,8 @@ export default class EncounterLayer extends Component<Props, State> {
     this.fillLayer = this.fillLayer.bind(this);
     this.emptyLayer = this.emptyLayer.bind(this);
     this.selectDrawMode = this.selectDrawMode.bind(this);
+    this.selectBrush = this.selectBrush.bind(this);
+    this.setBrushRadius = this.setBrushRadius.bind(this);
     this.draw = this.draw.bind(this);
     this.sendToScreen = this.sendToScreen.bind(this);
     this.setUpDrawScaling = this.setUpDrawScaling.bind(this);
@@ -224,6 +241,15 @@ export default class EncounterLayer extends Component<Props, State> {
     this.setState({ drawMode });
   }
 
+  selectBrush(event: React.ChangeEvent<HTMLSelectElement>) {
+    const brush: Brush = brushes[event.target.value] || Brush.Rectangle;
+    this.setState({ brush });
+  }
+
+  setBrushRadius(event: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ brushRadius: event.target.value });
+  }
+
   draw(event: MouseEvent | TouchEvent) {
     let screenPos = [0, 0];
     let shouldDraw = false;
@@ -244,8 +270,8 @@ export default class EncounterLayer extends Component<Props, State> {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
   
-    const { color } = this.props;
-    const { drawMode, posRatio } = this.state;
+    const { color, alphaColor } = this.props;
+    const { drawMode, posRatio, brush, brushRadius } = this.state;
 
     const canvasPos = canvas.getBoundingClientRect();
 
@@ -254,11 +280,19 @@ export default class EncounterLayer extends Component<Props, State> {
       Math.floor((screenPos[1] - canvasPos.top) * posRatio[1]),
     ];
 
+    const radius = parseFloat(brushRadius) || 4;
     if (drawMode === DrawMode.DRAW) {
       ctx.fillStyle = color;
-      ctx.fillRect(eventPos[0] - 3, eventPos[1] - 3, 8, 8);
+      if (brush === Brush.Circle) {
+        const radgrad = ctx.createRadialGradient(eventPos[0], eventPos[1], 1, eventPos[0], eventPos[1], radius);
+        radgrad.addColorStop(0, color);
+        radgrad.addColorStop(0.9, color);
+        radgrad.addColorStop(1, alphaColor);
+        ctx.fillStyle = radgrad;
+      }
+      ctx.fillRect(eventPos[0] - radius, eventPos[1] - radius, 2*radius, 2*radius);
     } else if (drawMode === DrawMode.ERASE) {
-      ctx.clearRect(eventPos[0] - 3, eventPos[1] - 3, 8, 8);
+      ctx.clearRect(eventPos[0] - radius, eventPos[1] - radius, 2*radius, 2*radius);
     }
 
     this.setState({ layerData: canvas.toDataURL() });    
@@ -276,7 +310,7 @@ export default class EncounterLayer extends Component<Props, State> {
 
   render() {
     const { layerId, zIndex, selected } = this.props;
-    const { hasStoredData, layerData, drawMode } = this.state;
+    const { hasStoredData, layerData, drawMode, brushRadius } = this.state;
     return (
       <LayerContainer zIndex={zIndex}>
         <Canvas ref={this.canvasRef} width={canvasRes.width} height={canvasRes.height}
@@ -284,6 +318,12 @@ export default class EncounterLayer extends Component<Props, State> {
         { selected &&
           <LayerActions>
             <ActionsTitle>{layerId} layer actions:</ActionsTitle>
+            <select onChange={this.selectBrush}>
+              {Object.keys(brushes).map(key => (
+                <option key={key} value={key}>{key}</option>
+              ))}
+            </select>
+            <input type="text" value={brushRadius} onChange={this.setBrushRadius} />
             <ActionButton active={drawMode === DrawMode.DRAW} onClick={() => this.selectDrawMode(DrawMode.DRAW)}>Draw</ActionButton>
             <ActionButton active={drawMode === DrawMode.ERASE} onClick={() => this.selectDrawMode(DrawMode.ERASE)}>Erase</ActionButton>
             <ActionButton onClick={this.fillLayer}>Fill layer</ActionButton>
