@@ -1,7 +1,11 @@
 export interface IEncounter {
   key: string;
   name: string;
-  cellSize?: number;
+  grid: {
+    cellSize: number;
+    offsetX: number;
+    offsetY: number
+  } | false;
   shaders: IEncounterShader[];
   layers: IEncounterLayer[];
 }

@@ -43,11 +43,6 @@ export default class MapScene extends Phaser.Scene {
     let { width: screenWidth, height: screenHeight } = this.sys.game.canvas;
     
     const encounterResource = encounterResourceKey(this.encounter);
-
-    const cellSize = this.encounter.cellSize || DEFAULT_CELL_SIZE;
-
-    const columns = Math.ceil(screenWidth / cellSize);
-    const rows = Math.ceil(screenHeight / cellSize);
     
     if (this.encounter.shaders) {
       this.encounter.shaders.map(shader => {
@@ -72,7 +67,14 @@ export default class MapScene extends Phaser.Scene {
         this.add.shader(encounterResource(layer.key), position.x, position.y, dimensions.width, dimensions.height);
       }
     });
-    
+
+    if (!this.encounter.grid) {
+      return;
+    }
+
+    const cellSize = this.encounter.grid.cellSize || DEFAULT_CELL_SIZE;
+    const columns = Math.ceil(screenWidth / cellSize);
+    const rows = Math.ceil(screenHeight / cellSize);
     this.effectsMap = new Grid(rows, columns);
     this.effectsMap.addToScene(this, screenWidth/2, screenHeight/2, cellSize);
   }

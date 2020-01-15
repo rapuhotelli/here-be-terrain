@@ -68,7 +68,7 @@ const ActionsTitle = styled(SectionTitle)`
 enum Brush {
   Rectangle,
   Circle,
-};
+}
 
 const brushes: {[key: string]: Brush} = {
   rectangle: Brush.Rectangle,
@@ -323,7 +323,7 @@ export default class EncounterLayer extends Component<Props, State> {
                 <option key={key} value={key}>{key}</option>
               ))}
             </select>
-            <input type="text" value={brushRadius} onChange={this.setBrushRadius} />
+            <input type='text' value={brushRadius} onChange={this.setBrushRadius} />
             <ActionButton active={drawMode === DrawMode.DRAW} onClick={() => this.selectDrawMode(DrawMode.DRAW)}>Draw</ActionButton>
             <ActionButton active={drawMode === DrawMode.ERASE} onClick={() => this.selectDrawMode(DrawMode.ERASE)}>Erase</ActionButton>
             <ActionButton onClick={this.fillLayer}>Fill layer</ActionButton>
