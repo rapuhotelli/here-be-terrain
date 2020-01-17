@@ -1,0 +1,12 @@
+{
+  "name": "here-be-dragons",
+  "version": "0.0.1",
+  "main": "src/main.ts",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "hbt-mainscreen",
+    "hbt-dmscreen",
+    "hbt-server"
+  ]
+}

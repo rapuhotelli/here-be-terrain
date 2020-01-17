@@ -4,9 +4,42 @@
   "main": "src/main.ts",
   "license": "MIT",
   "private": true,
-  "workspaces": [
-    "hbt-mainscreen",
-    "hbt-dmscreen",
-    "hbt-server"
-  ]
+  "scripts": {
+    "build": "NODE_ENV=production webpack --config ./webpack.prod.config.js",
+    "dev": "concurrently \"yarn:dev:*\"",
+    "dev:lint": "yarn watch \"yarn lint\" ./src/hbt-mainscreen",
+    "dev:wp": "webpack --watch --mode development --config ./config/webpack.config.js",
+    "wpds": "webpack-dev-server --mode development",
+    "lint": "tslint -p \".\" -t stylish",
+    "get-typedef": "mkdirp types/phaser && curl -o types/phaser/index.d.ts https://raw.githubusercontent.com/photonstorm/phaser/master/types/phaser.d.ts"
+  },
+  "dependencies": {
+    "@juggle/resize-observer": "^2.3.0",
+    "phaser": "3.18.1",
+    "prettier": "^1.19.1",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-router-dom": "^5.1.1",
+    "socket.io-client": "^2.2.0",
+    "styled-components": "^4.3.2"
+  },
+  "devDependencies": {
+    "@types/socket.io-client": "^1.4.32",
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.9.0",
+    "@types/react-router-dom": "^5.1.0",
+    "@types/styled-components": "^4.1.19",
+    "concurrently": "^4.1.1",
+    "expose-loader": "^0.7.5",
+    "mkdirp": "^0.5.1",
+    "raw-loader": "^3.0.0",
+    "ts-loader": "^6.0.4",
+    "tslint": "^5.11.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.6.3",
+    "watch": "^1.0.2",
+    "webpack": "^4.24.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
+  }
 }

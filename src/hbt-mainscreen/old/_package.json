@@ -14,16 +14,20 @@
     "get-typedef": "mkdirp types/phaser && curl -o types/phaser/index.d.ts https://raw.githubusercontent.com/photonstorm/phaser/master/types/phaser.d.ts"
   },
   "dependencies": {
-    "easystarjs": "^0.4.3",
     "phaser": "3.18.1",
     "socket.io-client": "^2.2.0"
   },
   "devDependencies": {
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.9.0",
+    "@types/react-router-dom": "^5.1.0",
+    "@types/styled-components": "^4.1.19",
     "@types/socket.io-client": "^1.4.32",
     "concurrently": "^4.1.1",
     "expose-loader": "^0.7.5",
     "mkdirp": "^0.5.1",
     "raw-loader": "^3.0.0",
+    "source-map-loader": "^0.2.4",
     "ts-loader": "^6.0.4",
     "tslint": "^5.11.0",
     "tslint-eslint-rules": "^5.4.0",
