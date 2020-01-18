@@ -76,6 +76,7 @@ export default class EncounterLoader extends Component<Object, State> {
     this.toggleEncounters = this.toggleEncounters.bind(this);
   }
   componentDidMount() {
+    console.log('aargh');
     socket.on(EncounterEvents.LIST_UPDATE, (data: Campaigns) => {
       this.setState({ campaigns: data });
     });
@@ -103,11 +104,13 @@ export default class EncounterLoader extends Component<Object, State> {
   }
 
   loadEncounter(campaign: string, encounter: string) {
+    console.log('loadEncounter', campaign, encounter);
     this.setState({
       selectedCampaign: campaign,
       selectedEncounter: encounter,
       selectedEncounterReady: false,
     });
+
     socket.emit(EncounterEvents.LOAD, campaign, encounter);
   }
   

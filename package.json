@@ -7,7 +7,7 @@
   "scripts": {
     "build": "NODE_ENV=production webpack --config ./webpack.prod.config.js",
     "dev": "concurrently \"yarn:dev:*\"",
-    "dev:lint": "yarn watch \"yarn lint\" ./src/hbt-mainscreen",
+    "dev:lint": "yarn watch \"yarn lint\" ./src/",
     "dev:wp": "webpack --watch --mode development --config ./config/webpack.config.js",
     "wpds": "webpack-dev-server --mode development",
     "lint": "tslint -p \".\" -t stylish",
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@juggle/resize-observer": "^2.3.0",
-    "phaser": "3.18.1",
+    "phaser": "3.22.0",
     "prettier": "^1.19.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
