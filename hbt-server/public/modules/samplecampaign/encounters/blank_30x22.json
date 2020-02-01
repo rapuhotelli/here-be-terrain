@@ -1,0 +1,22 @@
+{
+  "key": "blank",
+  "name": "blank",
+  "grid": {
+    "cellSize": 28,
+    "offsetX": 0,
+    "offsetY": 0
+  },
+  "layers": [
+    {
+      "key": "ground",
+      "type": "texture",
+      "texture": "samplecampaign/encounters/blank_28g_30w_22h.png",
+      "active": true,
+      "dimensions": {
+        "-todo": "autodetect",
+        "width": 840,
+        "height": 616
+      }
+    }
+  ]
+}

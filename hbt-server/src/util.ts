@@ -42,6 +42,7 @@ const getDirectoryAsync = async (path: string): Promise<string[]> => {
   try {
     files = await readdir(path);
     // console.log(files);
+    files = files.filter(f => f !== '.DS_Store');
 
   } catch (e) {
     console.log('getDirectoryAsync error', e);
