@@ -21,6 +21,8 @@ export const EncounterEvents = {
   LOAD: 'encounter:load',
   SHOW: 'encounter:show',
   READY: 'encounter:ready',
+  ENCOUNTER_STATE_REQUEST: 'encounter:state:request',
+  ENCOUNTER_STATE_UPDATE: 'encounter:state:update',
 };
 
 export const ScreenEvents = {

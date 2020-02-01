@@ -22,7 +22,7 @@ enum AppMode {
 
 const AppSelect = (props: {mountNode: Element}) => {
   const { mountNode } = props;
-  const [selectedAppMode, setSelectedApp] = useState<AppMode>(AppMode.Uninitialized);
+  const [selectedAppMode, setSelectedApp] = useState<AppMode>(AppMode.MainScreen);
 
 
   if (selectedAppMode === AppMode.MainScreen) {

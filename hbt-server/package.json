@@ -1,7 +1,7 @@
 {
   "name": "hbt-server",
   "version": "1.0.0",
-  "main": "build/hbt-server/src/index.js",
+  "main": "build/hbt-server/src/main.js",
   "license": "MIT",
   "scripts": {
     "dev": "concurrently \"yarn:dev:*\"",
@@ -16,6 +16,7 @@
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
+    "watch": "^1.0.2",
     "@types/socket.io": "^2.1.2",
     "concurrently": "^4.1.1",
     "nodemon": "^1.19.1",

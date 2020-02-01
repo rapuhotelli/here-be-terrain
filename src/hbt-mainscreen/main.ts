@@ -1,6 +1,7 @@
 import 'phaser';
 
 import EncounterManager from './EncounterManager';
+import MainScene from './MainScene';
 import GameConfig = Phaser.Types.Core.GameConfig;
 import { DEFAULT_RESOLUTION_X, DEFAULT_RESOLUTION_Y } from './params';
 
@@ -35,7 +36,7 @@ export const initializeMainScreen = () => {
     // @ts-ignore
     context: webgl2Context,
 
-    scene: EncounterManager,
+    scene: MainScene,
 
     width: DEFAULT_RESOLUTION_X,
     height: DEFAULT_RESOLUTION_Y,
