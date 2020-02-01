@@ -102,8 +102,8 @@ export default class MapScene extends Phaser.Scene {
       const horizontalGrid = ground.dimensions.width / cellSize;
       const verticalGrid = ground.dimensions.height / cellSize;
       console.log(scaledDimensions);
-      const grid = this.add.grid(position.x, position.y, scaledDimensions.width, scaledDimensions.height, cellSize, cellSize);
-      grid.setAltFillStyle(0xff0000, 0.5);
+      const grid = this.add.grid(position.x, position.y, scaledDimensions.width, scaledDimensions.height, cellSize, cellSize, 0xFFFFFF, 0, 0x000000, 0.2);
+      grid.setAltFillStyle(0x000000, 0.2);
     }
     
     
